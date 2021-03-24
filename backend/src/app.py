@@ -118,11 +118,15 @@ class StudiesNamespace(AsyncNamespace):
       self.start_disc = get_time()
       result = {"disc_link": self.disc_link}
       self.emit("admin_start_disc", result, room=TESTER_ROOM)
+      result = {"start_disc": self.start_disc}
+      self.emit("admin_start_disc", result, room=ADMIN_ROOM)
 
     async def on_admin_end_disc(self, sid, request):
       self.end_disc = get_time()
       result = {}
       self.emit("admin_end_disc", result, room=TESTER_ROOM)
+      result = {"end_disc": self.end_disc}
+      self.emit("admin_end_disc", result, room=ADMIN_ROOM)
 
     async def on_end_survey_task(self, sid, request):
       participant_id = request["participant_id"]
