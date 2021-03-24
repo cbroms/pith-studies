@@ -1,5 +1,5 @@
 export const steps = {
-  CONNECTING: 1,
+  WELCOME: 1,
   CONSENT: 2,
   INSTRUCTIONS: 3,
   WAITING_ROOM: 4,

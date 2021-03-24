@@ -5,7 +5,7 @@ import { steps } from "../steps/steps";
 
 const defaultState = {
   pid: "",
-  step: steps.WAITING_ROOM_READY_SUBMITTED,
+  step: steps.WELCOME,
   endRedirectURL: "",
   discussionURL: "",
 };
@@ -16,20 +16,38 @@ export const studyStore = createDerivedSocketStore(
     joinStudy: (pid, resolve, reject) => {
       return (socket, update) => {
         console.log("join_study");
-        socket.emit("join_study", { pid }, (res) => {
-          const json = JSON.parse(res);
-
-          if (!json.error) {
-            // done
-          } else {
-            // errors!
-          }
+        socket.emit("join_study", { participant_id: pid }, (res) => {
+          // this should always work
+          update((s) => {
+            return { ...s, step: steps.CONSENT, pid: pid };
+          });
         });
       };
     },
-    consentComplete: (pid, consent1, consent2, consent3, resolve, reject) => {
+    consentComplete: (
+      pid,
+      response1,
+      response2,
+      response3,
+      resolve,
+      reject
+    ) => {
       return (socket, update) => {
-        console.log("consent_complete", pid, consent1, consent2, consent3);
+        console.log("consent_complete");
+
+        socket.emit(
+          "end_consent",
+          { participant_id: pid, response1, response2, response3 },
+          (res) => {
+            const canContinue = JSON.parse(res);
+            console.log(canContinue);
+            // // this should always work
+            // update((s) => {
+            //   return { ...s, step: steps.CONSENT, pid: pid };
+            // });
+          }
+        );
+
         update((s) => {
           return { ...s, step: steps.INSTRUCTIONS };
         });

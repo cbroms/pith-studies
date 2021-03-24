@@ -31,3 +31,4 @@ const createSocket = () => {
 };
 
 export const studySocket = createSocket();
+export const adminSocket = createSocket();
