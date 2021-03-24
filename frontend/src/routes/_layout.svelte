@@ -1,22 +1,34 @@
 <script>
-	import Nav from '../components/Nav.svelte';
+  import { goto, stores } from "@sapper/app";
 
-	export let segment;
+  import { afterUpdate, onMount } from "svelte";
+  import { studyStore } from "../stores/studyStore";
+  import { steps } from "../steps/steps";
+
+  import { studySocket as socket } from "../stores/socket.js";
+  const { session } = stores();
+  const { CONNECTION } = $session;
+
+  // initialize study socket
+  onMount(async () => {
+    socket.initialize(CONNECTION, "Studies");
+  });
+
+  afterUpdate(() => {
+    if ($studyStore.step === steps.INSTRUCTIONS) {
+      goto("/instructions");
+    } else if ($studyStore.step === steps.CONSENT) {
+      goto("/consent");
+    } else if (
+      $studyStore.step === steps.WAITING_ROOM ||
+      $studyStore.step === steps.WAITING_ROOM_READY ||
+      $studyStore.step === steps.WAITING_ROOM_READY_SUBMITTED
+    ) {
+      goto("/waiting");
+    }
+  });
 </script>
 
-<style>
-	main {
-		position: relative;
-		max-width: 56em;
-		background-color: white;
-		padding: 2em;
-		margin: 0 auto;
-		box-sizing: border-box;
-	}
-</style>
-
-<Nav {segment}/>
-
 <main>
-	<slot></slot>
+  <slot />
 </main>
