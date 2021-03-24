@@ -1,0 +1,31 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/app.Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      MONGODB_CONN: ${MONGO}
+      MONGODB_NAME: ${MONGO_NAME}
+    working_dir: /api
+    volumes:
+      - ./backend/src:/api:cached
+  static:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/static.Dockerfile
+    depends_on:
+      - app
+    working_dir: /static
+    ports:
+      - "3000:3000"
+      - "10000:10000"
+    stdin_open: true
+    environment:
+      BACKEND_HOST: ${HOST_NAME}
+      BACKEND_PORT: ${HOST_PORT}
+    volumes:
+      - ./frontend/src:/static/src:cached
+      - ./frontend/static:/static/static:cached
