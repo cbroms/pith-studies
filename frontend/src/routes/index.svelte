@@ -1,8 +1,26 @@
 <script>
+  import { onMount } from "svelte";
+  import { studyStore } from "../stores/studyStore";
+
+  let pid;
+  let pressed = false;
+
+  onMount(() => {
+    const url = new URL(window.location.href);
+    pid = url.searchParams.get("PROLIFIC_PID");
+  });
+
+  const onContinue = async () => {
+    pressed = true;
+    await studyStore.joinStudy(pid);
+  };
 </script>
 
-<svelte:head>
-  <title>study</title>
-</svelte:head>
+<h1>Welcome!</h1>
 
-<h1>Connecting to server...</h1>
+<p>Ensure your Prolific ID is entered correctly, then press continue.</p>
+
+<label for="pid">Please enter your Prolific ID: </label>
+<input name="pid" bind:value={pid} />
+
+<button disapbled={!pressed} on:click={onContinue}>Continue</button>
