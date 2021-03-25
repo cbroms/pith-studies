@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { studyStore } from "../stores/studyStore";
+  import { studyStore } from "../../stores/studyStore";
 
   let pid;
   let pressed = false;

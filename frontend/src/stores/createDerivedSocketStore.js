@@ -1,5 +1,4 @@
 import { derived } from "svelte/store";
-
 // create a store that derives from the socket store and keeps a custom state that's updated
 // using emit/on functions from the socket object.
 
@@ -66,7 +65,6 @@ export const createDerivedSocketStore = (
 
   // run the functions in the queue
   const tryToRunExecQueue = () => {
-    console.log(localSocket);
     // only run the queue if the socket is valid and there are functions
     if (localSocket !== null && localSocket.connected && execQueue.length > 0) {
       // make a copy of the functions in the queue then reset it

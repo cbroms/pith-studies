@@ -4,9 +4,8 @@
   let studyNumber = "";
 
   const onSubmit = async () => {
-    console.log("cearting");
     await adminStore.createStudy(studyNumber);
-    goto(`/${studyNumber}`);
+    goto(`admin/${studyNumber}`);
   };
 </script>
 

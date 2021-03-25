@@ -1,23 +1,23 @@
 import { createDerivedSocketStore } from "./createDerivedSocketStore";
-import { studySocket } from "./socket";
+import { adminSocket } from "./socket";
 
 // import { steps } from "../steps/steps";
 
 const defaultState = {
-  studyId: "",
+  sid: "",
 };
 
 export const adminStore = createDerivedSocketStore(
-  studySocket,
+  adminSocket,
   {
     createStudy: (id, resolve, reject) => {
-      console.log(id);
+      id = id.trim();
       return (socket, update) => {
         console.log("create_study", socket);
-        socket.emit("admin_create_study", { session: id }, (res) => {
+        socket.emit("admin_study_setup", { session: id }, (res) => {
           // this should always work
           update((s) => {
-            return { ...s, studyId: id };
+            return { ...s, sid: id };
           });
           resolve();
         });

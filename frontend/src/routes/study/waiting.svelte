@@ -1,6 +1,6 @@
 <script>
-  import { steps } from "../steps/steps";
-  import { studyStore } from "../stores/studyStore";
+  import { steps } from "../../steps/steps";
+  import { studyStore } from "../../stores/studyStore";
 
   let clicked = false;
 

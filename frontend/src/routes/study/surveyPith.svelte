@@ -1,5 +1,5 @@
 <script>
-  import { studyStore } from "../stores/studyStore";
+  import { studyStore } from "../../stores/studyStore";
 
   let response1 = null;
   let response2 = null;

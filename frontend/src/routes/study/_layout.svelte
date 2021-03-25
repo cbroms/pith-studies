@@ -2,16 +2,16 @@
   import { goto, stores } from "@sapper/app";
 
   import { afterUpdate, onMount } from "svelte";
-  import { studyStore } from "../stores/studyStore";
-  import { steps } from "../steps/steps";
+  import { studyStore } from "../../stores/studyStore";
+  import { steps } from "../../steps/steps";
 
-  import { studySocket as socket } from "../stores/socket.js";
+  import { studySocket as socket } from "../../stores/socket.js";
   const { session } = stores();
   const { CONNECTION } = $session;
 
   // initialize study socket
   onMount(async () => {
-    socket.initialize(CONNECTION, "Studies");
+    socket.initialize(CONNECTION, "Study");
   });
 
   afterUpdate(() => {
