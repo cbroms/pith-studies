@@ -8,6 +8,7 @@ const defaultState = {
   step: steps.WELCOME,
   endRedirectURL: "",
   discussionURL: "",
+  testType: null, // gives tutorial
 };
 
 export const studyStore = createDerivedSocketStore(
@@ -39,69 +40,126 @@ export const studyStore = createDerivedSocketStore(
           "end_consent",
           { participant_id: pid, response1, response2, response3 },
           (res) => {
-            const canContinue = JSON.parse(res);
-            console.log(canContinue);
-            // // this should always work
-            // update((s) => {
-            //   return { ...s, step: steps.CONSENT, pid: pid };
-            // });
+            const json = JSON.parse(res);
+            console.log("moving to instructions", json.accepted);
+            // this should always work
+            if (json.accepted) {
+              update((s) => {
+                return { ...s, step: steps.INSTRUCTIONS };
+              });
+            }
+            else {
+              update((s) => {
+                return { ...s, step: steps.CANCEL };
+              });
+            }
+            resolve();
           }
         );
-
-        update((s) => {
-          return { ...s, step: steps.INSTRUCTIONS };
-        });
-
-        resolve();
       };
     },
-
     instructionsComplete: (pid, resolve, reject) => {
       return (socket, update) => {
         console.log("instructions_complete", pid);
-        update((s) => {
-          return { ...s, step: steps.WAITING_ROOM };
-        });
-
-        resolve();
+        socket.emit(
+          "end_instr",
+          { participant_id: pid },
+          (res) => {
+            const json = JSON.parse(res);
+            update((s) => {
+              return { ...s, step: steps.TUTORIAL, testType: json.test_type };
+            });
+            resolve();
+          }
+        );
       };
     },
-
+    tutorialComplete: (pid, resolve, reject) => {
+      return (socket, update) => {
+        console.log("tutorial_complete", pid);
+        socket.emit(
+          "end_tutorial",
+          { participant_id: pid },
+          (res) => {
+            update((s) => {
+              return { ...s, step: steps.WAITING_ROOM };
+            });
+            resolve();
+          }
+        );
+      };
+    },
     readyComplete: (pid, resolve, reject) => {
       return (socket, update) => {
         console.log("ready_complete", pid);
-        update((s) => {
-          return { ...s, step: steps.WAITING_ROOM_READY_SUBMITTED };
-        });
-        resolve();
+        socket.emit(
+          "end_waiting",
+          { participant_id: pid },
+          (res) => {
+            update((s) => {
+              return { ...s, step: steps.WAITING_ROOM_READY_SUBMITTED };
+            });
+            resolve();
+          }
+        );
       };
     },
-    subscribe: () => {
+    surveyTaskComplete: (pid, answers, resolve, reject) => {
       return (socket, update) => {
-        // socket.on("join_disc", (res) => {
-        //   console.log("joined");
-        //   const json = JSON.parse(res);
-        //   update((state) => {
-        //     return {
-        //       ...state,
-        //       participants: [...state.participants, json.user],
-        //     };
-        //   });
-        // });
-        // socket.on("leave_disc", (res) => {
-        //   console.log("left");
-        //   const json = JSON.parse(res);
-        //   update((state) => {
-        //     let participants = [...state.participants];
-        //     participants = participants.filter((e) => {
-        //       return e.id !== json.user.id;
-        //     });
-        //     return {
-        //       ...state,
-        //       participants: participants,
-        //     };
-        //   });
-        // });
+        console.log("survey_task_complete", pid);
+        socket.emit(
+          "end_survey_task",
+          { participant_id: pid, answers },
+          (res) => {
+            update((s) => {
+              return { ...s, step: steps.SURVEY_PITH };
+            });
+            resolve();
+          }
+        );
+      };
+    },
+    surveyPithComplete: (pid, answers, resolve, reject) => {
+      return (socket, update) => {
+        console.log("survey_pith_complete", pid);
+        socket.emit(
+          "end_survey_pith",
+          { participant_id: pid, answers },
+          (res) => {
+            const json = JSON.parse(res);
+            update((s) => {
+              return { 
+                ...s, step: steps.DONE, endRedirectURL: json.prolific_link 
+              };
+            });
+            resolve();
+          }
+        );
+      };
+    },
+    subscribeStudy: () => {
+      return (socket, update) => {
+        socket.on("admin_initiate_ready", (res) => {
+          console.log("readying...");
+          update((s) => {
+            return { ...s, step: steps.WAITING_ROOM_READY };
+          });
+        });
+        socket.on("admin_start_disc", (res) => {
+          console.log("start");
+          update((s) => {
+            const json = JSON.parse(res);
+            return { 
+              ...s, step: steps.DISCUSSION, discussionURL: json.disc_link 
+            };
+          });
+        });
+        socket.on("admin_end_disc", (res) => {
+          console.log("end");
+          update((s) => {
+            return { ...s, step: steps.SURVEY_TASK };
+          });
+        });
       };
     },
   },

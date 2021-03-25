@@ -1,15 +1,26 @@
 from aiohttp import web
 import datetime
+from json import JSONEncoder, dumps
+import logging
 import mongoengine
 import os
 from pymongo import MongoClient
-from random import randint
 import socketio
 from socketio import AsyncNamespace
 
+# logger
+LOG_FILENAME = "session"
+logger = logging.getLogger("app_logger")
+fh = logging.FileHandler(LOG_FILENAME)
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+logger.setLevel(logging.DEBUG)
+
 # constants
 MONGODB_CONN = os.getenv("MONGODB_CONN", "mongodb://localhost:27017")
-MONGODB_NAME = os.getenv("MONGODB_NAME", "pith")
+MONGODB_NAME = os.getenv("MONGODB_NAME", "pith_studies")
+logger.info("Mongo: {} {}".format(MONGODB_CONN, MONGODB_NAME))
 PORT = os.getenv("PORT", 8080)
 ADMIN_NS = "/Admin"
 STUDY_NS = "/Study"
@@ -32,25 +43,26 @@ def get_time():
 
 """ Reset. """
 global session, test_type, disc_link, prolific_link
-global db, params, consent, survey_task, survey_pith
 global start_disc, end_disc
 session = None
 test_type = None
 disc_link = None
 prolific_link = None
-db = None
-params = None
-consent = None
-survey_task = None
-survey_pith = None
 start_disc = None
 end_disc = None
+
+db = client["pith_studies"]
+params = db["params"]
+consent = db["consent"]
+survey_task = db["survey_task"]
+survey_pith = db["survey_pith"]
 
 class AdminNamespace(AsyncNamespace):
 
     def generate_params(self):
       current = get_time()
       return {
+        "session": session,
         "time": current,
         "test_type": test_type, 
         "disc_link": disc_link, 
@@ -59,71 +71,71 @@ class AdminNamespace(AsyncNamespace):
 
     async def on_admin_study_setup(self, sid, request):
       """ Do this before Prolific study is even published. """
-      global session, db, params, consent, survey_task, survey_pith
+      global session
 
-      _session = request["session"]
+      session = request["session"]
       self.enter_room(sid, ADMIN_ROOM)
-      session = _session
       # save data under given test session
-      db = client["pith_studies_{}".format(session)]
-      params = db["params"]
-      consent = db["consent"]
-      survey_task = db["survey_task"]
-      survey_pith = db["survey_pith"]
+      logger.info("session: {}".format(session))
 
     async def on_admin_set_test_type(self, sid, request):
       """ Do this before people get to tutorials. """
       global test_type 
 
-      _test_type = request["test_type"]
-      test_type = _test_type
+      test_type = request["test_type"]
       params.insert_one(self.generate_params())
 
     async def on_admin_set_disc_link(self, sid, request):
       """ Do this before people get to discussion. """
       global disc_link 
 
-      _disc_link = request["disc_link"]
-      disk_link = _disc_link
+      disc_link = request["disc_link"]
       params.insert_one(self.generate_params())
 
     async def on_admin_set_prolific_link(self, sid, request):
       """ Do this before people finish study. """
       global prolific_link 
 
-      _prolific_link = request["prolific_link"]
-      prolific_link = _prolific_link
+      prolific_link = request["prolific_link"]
       params.insert_one(self.generate_params())
 
     async def on_admin_initiate_ready(self, sid, request):
+      logger.info("admin_initiate_ready")
       result = {}
+      result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "admin_initiate_ready", result, namespace=STUDY_NS, room=TESTER_ROOM
       )
+      logger.info("admin_initiate_ready 2")
 
     async def on_admin_start_disc(self, sid, request):
       global start_disc 
 
       start_disc = get_time()
       result = {"disc_link": disc_link}
-      self.emit(
+      result = dumps(result, cls=JSONEncoder)
+      await self.emit(
         "admin_start_disc", result, namespace=STUDY_NS, room=TESTER_ROOM
       )
       result = {"start_disc": start_disc}
-      self.emit("admin_start_disc", result, room=ADMIN_ROOM)
+      result = dumps(result, cls=JSONEncoder)
+      return result
 
     async def on_admin_end_disc(self, sid, request):
       global end_disc 
 
       end_disc = get_time()
       result = {}
-      self.emit(
+      result = dumps(result, cls=JSONEncoder)
+      await self.emit(
         "admin_end_disc", result, namespace=STUDY_NS, room=TESTER_ROOM
       )
       result = {"end_disc": end_disc}
-      self.emit("admin_end_disc", result, room=ADMIN_ROOM)
+      result = dumps(result, cls=JSONEncoder)
+      return result
 
     async def on_admin_study_teardown(self, sid, request):
+      self.close_room(TESTER_ROOM, namespace=STUDY_NS)
       self.leave_room(sid, ADMIN_ROOM)
 
 sio.register_namespace(AdminNamespace(ADMIN_NS))
@@ -134,18 +146,22 @@ class StudyNamespace(AsyncNamespace):
     async def on_join_study(self, sid, request):
       participant_id = request["participant_id"]
       result = {"participant_id": participant_id}
+      result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "join_study", result, namespace=ADMIN_NS, room=ADMIN_ROOM
       )
       self.enter_room(sid, TESTER_ROOM)
+      logger.info("joined: {}".format(participant_id))
 
     async def on_end_consent(self, sid, request):
+      logger.info("end_consent")
       participant_id = request["participant_id"]
       response1 = request["response1"]
       response2 = request["response2"]
       response3 = request["response3"]
       accepted = response1 and response2 and response3
       consent.insert_one({
+        "session": session,
         "participant_id": participant_id,
         "response1": response1,
         "response2": response2,
@@ -153,20 +169,30 @@ class StudyNamespace(AsyncNamespace):
         "accepted": accepted
       })
       result = {"participant_id": participant_id, "accepted": accepted}
+      result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "end_consent", result, namespace=ADMIN_NS, room=ADMIN_ROOM
       )
+      result = {"accepted": accepted}
+      result = dumps(result, cls=JSONEncoder)
+      logger.info("{} consented {}".format(participant_id, accepted))
+      return result
 
     async def on_end_instr(self, sid, request):
       participant_id = request["participant_id"]
       result = {"participant_id": participant_id}
+      result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "end_instr", result, namespace=ADMIN_NS, room=ADMIN_ROOM
       )
+      result = {"test_type": test_type}
+      result = dumps(result, cls=JSONEncoder)
+      return result
 
     async def on_end_tutorial(self, sid, request):
       participant_id = request["participant_id"]
       result = {"participant_id": participant_id}
+      result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "end_tutorial", result, namespace=ADMIN_NS, room=ADMIN_ROOM
       )
@@ -174,6 +200,7 @@ class StudyNamespace(AsyncNamespace):
     async def on_end_waiting(self, sid, request):
       participant_id = request["participant_id"]
       result = {"participant_id": participant_id}
+      result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "end_waiting", result, namespace=ADMIN_NS, room=ADMIN_ROOM
       )
@@ -181,10 +208,11 @@ class StudyNamespace(AsyncNamespace):
     async def on_end_survey_task(self, sid, request):
       participant_id = request["participant_id"]
       answers = request["answers"]
-      survey_task.insert_one(
-        {"participant_id": participant_id, "answers": answers}
-      )
+      survey_task.insert_one({
+        "session": session, "participant_id": participant_id, "answers": answers
+      })
       result = {"participant_id": participant_id}
+      result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "end_survey_task", result, namespace=ADMIN_NS, room=ADMIN_ROOM
       )
@@ -193,14 +221,16 @@ class StudyNamespace(AsyncNamespace):
       participant_id = request["participant_id"]
       answers = request["answers"]
       survey_pith.insert_one(
-        {"participant_id": participant_id, "answers": answers}
+        {"session": session, "participant_id": participant_id, "answers": answers}
       )
       result = {"participant_id": participant_id}
+      result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "end_survey_pith", result, namespace=ADMIN_NS, room=ADMIN_ROOM
       )
       self.leave_room(sid, TESTER_ROOM)
       result = {"prolific_link": prolific_link}
+      result = dumps(result, cls=JSONEncoder)
       return result
 
 sio.register_namespace(StudyNamespace(STUDY_NS))

@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: ./dockerfiles/app.Dockerfile
+    depends_on:
+      - mongo
     ports:
       - "8080:8080"
     environment:
@@ -29,3 +31,9 @@ services:
     volumes:
       - ./frontend/src:/static/src:cached
       - ./frontend/static:/static/static:cached
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}

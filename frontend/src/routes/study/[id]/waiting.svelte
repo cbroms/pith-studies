@@ -1,6 +1,6 @@
 <script>
-  import { steps } from "../../steps/steps";
-  import { studyStore } from "../../stores/studyStore";
+  import { steps } from "../../../steps/steps";
+  import { studyStore } from "../../../stores/studyStore";
 
   let clicked = false;
 
@@ -16,7 +16,7 @@
 
 {#if $studyStore.step === steps.WAITING_ROOM_READY}
   <h1>Press ready to start</h1>
-  <button on:click={onReady} disabled={!clicked}>Ready</button>
+  <button on:click={onReady}>Ready</button>
 {/if}
 
 {#if $studyStore.step === steps.WAITING_ROOM_READY_SUBMITTED}
