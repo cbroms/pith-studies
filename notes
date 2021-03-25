@@ -1,4 +1,4 @@
- mongodb+srv://pith_studies_admin:Eguwj881E02@cluster0.fh4fj.mongodb.net/pith_studies?retryWrites=true&w=majority
+ mongodb+srv://pith_studies_admin:<password>@cluster0.fh4fj.mongodb.net/pith_studies?retryWrites=true&w=majority
 
 TODO:
 - redirect to completion link
@@ -11,3 +11,4 @@ TODO:
 - having instructions or something in waiting room
 - check that no matter how user interacts with interface, is robust (i.e. the 
   if consent form checkboxes are closed/opened)
+- connect to atlas mongo with link above and change password!!!
