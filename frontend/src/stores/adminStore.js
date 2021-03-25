@@ -1,5 +1,5 @@
 import { createDerivedSocketStore } from "./createDerivedSocketStore";
-import { adminSocket } from "./socket";
+import { studySocket } from "./socket";
 
 // import { steps } from "../steps/steps";
 
@@ -8,9 +8,10 @@ const defaultState = {
 };
 
 export const adminStore = createDerivedSocketStore(
-  adminSocket,
+  studySocket,
   {
     createStudy: (id, resolve, reject) => {
+      console.log(id);
       return (socket, update) => {
         console.log("create_study", socket);
         socket.emit("admin_create_study", { session: id }, (res) => {
@@ -53,5 +54,3 @@ export const adminStore = createDerivedSocketStore(
   },
   defaultState
 );
-
-console.log(adminStore);

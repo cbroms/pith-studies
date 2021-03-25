@@ -66,6 +66,7 @@ export const createDerivedSocketStore = (
 
   // run the functions in the queue
   const tryToRunExecQueue = () => {
+    console.log(localSocket);
     // only run the queue if the socket is valid and there are functions
     if (localSocket !== null && localSocket.connected && execQueue.length > 0) {
       // make a copy of the functions in the queue then reset it
