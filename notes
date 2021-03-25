@@ -1,1 +1,13 @@
  mongodb+srv://pith_studies_admin:Eguwj881E02@cluster0.fh4fj.mongodb.net/pith_studies?retryWrites=true&w=majority
+
+TODO:
+- redirect to completion link
+- iFrame with discussion link
+- instead of admin assuming ready, start, end works, should do a handshake
+- save parameters better in server => have a session actually mean something
+  so could theoretically host multiple discussions at once
+- should probably return with success or error
+- required questions that prevent one from continuing
+- having instructions or something in waiting room
+- check that no matter how user interacts with interface, is robust (i.e. the 
+  if consent form checkboxes are closed/opened)
