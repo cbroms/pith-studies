@@ -137,7 +137,28 @@ export const studyStore = createDerivedSocketStore(
         );
       };
     },
-    subscribeStudy: () => {
+    /*
+    confirmReady: (resolve, reject) => {
+      return (socket, update) => {
+        socket.emit("ready_disc", {"participant_id": pid}, (res) => { resolve(); };
+      };
+    },
+    confirmStart: (resolve, reject) => {
+      return (socket, update) => {
+        socket.emit("start_disc", {"participant_id": pid}, (res) => { 
+          console.log("start_disc");
+        });
+      };
+    },
+    confirmEnd: (resolve, reject) => {
+      return (socket, update) => {
+        io.emit("end_disc", {"participant_id": pid}, (res) => { 
+          console.log("end_disc");
+        });
+      };
+    },
+    */
+    subscribeStudy: (pid) => {
       return (socket, update) => {
         socket.on("admin_initiate_ready", (res) => {
           console.log("readying...");
@@ -147,17 +168,29 @@ export const studyStore = createDerivedSocketStore(
         });
         socket.on("admin_start_disc", (res) => {
           console.log("start");
+          const json = JSON.parse(res);
           update((s) => {
-            const json = JSON.parse(res);
-            return { 
-              ...s, step: steps.DISCUSSION, discussionURL: json.disc_link 
-            };
+            const step = s.step;
+            if (step === steps.WAITING_ROOM_READY_SUBMITTED) {
+              return { 
+                ...s, step: steps.DISCUSSION, discussionURL: json.disc_link 
+              };
+            }
+            else { // no change
+              return {...s};
+            }
           });
         });
         socket.on("admin_end_disc", (res) => {
           console.log("end");
           update((s) => {
-            return { ...s, step: steps.SURVEY_TASK };
+            const step = s.step;
+            if (step === steps.DISCUSSION) {
+              return { ...s, step: steps.SURVEY_TASK };
+            }
+            else { // no change
+              return {...s};
+            }
           });
         });
       };

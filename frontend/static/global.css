@@ -2,10 +2,95 @@ body {
   margin: 0;
   font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  font-size: 16px;
+  font-size: 20px;
   color: #333;
 }
 
 label {
+  margin-top: -5px;
+  padding: 0;
   display: block;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+button {
+  padding: 0 5px;
+  width: auto;
+  height: 30px;
+  background-color: black;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid black;
+}
+button:hover {
+  background-color: #CDCDCD;
+  color: black;
+}
+
+input {
+  padding: 0;
+  font-size: 20px;
+  height: 30px;
+  background: white;
+  border: 2px solid black;
+}
+
+textarea {
+  padding: 0;
+  font-size: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  background: white;
+  border: 2px solid black;
+}
+
+li {
+  margin: 20px 0;
+}
+
+input[type='checkbox'] {
+  -webkit-appearance:none;
+  width:18px;
+  height:18px;
+  background:white;
+  border:2px solid black;
+  margin: 0 5px 0 0;
+}
+input[type='checkbox']:checked {
+    background: black;
+}
+
+input[type='radio'] {
+  -webkit-appearance:none;
+  width:18px;
+  height:18px;
+  background:white;
+  border:2px solid black;
+  border-radius: 50%;
+  margin: 0 5px -2px 5px;
+}
+input[type='radio']:checked {
+    background: black;
+}
+
+.option {
+  font-size: 20px;
+  padding: 5px;
+  display: inline-block;
+}
+
+.container-outer {
+  margin: 0 auto;
+  max-width: 800px;
+  width: 100%;
+  padding: 40px;
+}
+
+.answer {
+  margin: 5px 0;
 }

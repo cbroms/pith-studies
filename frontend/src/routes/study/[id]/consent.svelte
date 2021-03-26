@@ -149,34 +149,43 @@
   <div class="response">
     <label>
       <input type="checkbox" bind:checked={consent1} />
-      <strong>I am age 18 or older.</strong>
+      <strong class="sign">I am age 18 or older.</strong>
     </label>
 
     {#if consent1}
       <label>
         <input type="checkbox" bind:checked={consent2} />
-        <strong>I have read and understand the information above.</strong>
+        <strong class="sign">I have read and understand the information above.</strong>
       </label>
     {/if}
 
     {#if consent1 && consent2}
       <label>
         <input type="checkbox" bind:checked={consent3} />
-        <strong>I want to participate in this research and continue with the task and survey.</strong>
+        <strong class="sign">I want to participate in this research and continue with the task and survey.</strong>
       </label>
     {/if}
 
+    <div class="submission">
     {#if consent1 && consent2 && consent3}
       <button on:click={onSubmit}>Submit</button>
     {/if}
+    </div>
   </div>
+  <div class="footer"/>
 </div>
 
 <style>
-  .container-outer {
-    padding: 40px;
-  }
   .response {
-    margin: 20px 0 40px 0;
+    margin: 20px 0 20px 0;
+  }
+  .footer {
+    margin: 200px;
+  }
+  .sign {
+    font-size: 21px;
+  }
+  .submission {
+    margin-top: 10px;
   }
 </style>

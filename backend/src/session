@@ -1,141 +1,174 @@
-2021-03-25 17:14:54,455 INFO session: e
-2021-03-25 17:16:46,096 INFO joined: me
-2021-03-25 17:17:52,189 INFO joined: me
-2021-03-25 17:33:05,353 INFO session: test
-2021-03-25 17:33:14,879 INFO joined: me
-2021-03-25 17:33:58,422 INFO session: test
-2021-03-25 17:38:26,645 INFO session: test
-2021-03-25 17:42:46,805 INFO session: test
-2021-03-25 17:45:23,709 INFO session: test
-2021-03-25 17:45:33,139 INFO joined: hi
-2021-03-25 17:49:22,892 INFO joined: meep
-2021-03-25 17:50:10,969 INFO session: test
-2021-03-25 17:50:19,237 INFO joined: meep
-2021-03-25 17:52:23,896 INFO joined: meep
-2021-03-25 17:53:08,944 INFO session: test
-2021-03-25 17:53:15,348 INFO joined: meep
-2021-03-25 17:54:40,037 INFO session: test, consent: Collection(Database(MongoClient(host=['cluster0-shard-00-02.fh4fj.mongodb.net:27017', 'cluster0-shard-00-00.fh4fj.mongodb.net:27017', 'cluster0-shard-00-01.fh4fj.mongodb.net:27017'], document_class=dict, tz_aware=False, connect=True, retrywrites=True, w='majority', authsource='admin', replicaset='atlas-g1kb91-shard-0', ssl=True), 'pith_studies_test'), 'consent')
-2021-03-25 17:54:46,635 INFO joined: meep
-2021-03-25 17:54:51,189 INFO consent: Collection(Database(MongoClient(host=['cluster0-shard-00-02.fh4fj.mongodb.net:27017', 'cluster0-shard-00-00.fh4fj.mongodb.net:27017', 'cluster0-shard-00-01.fh4fj.mongodb.net:27017'], document_class=dict, tz_aware=False, connect=True, retrywrites=True, w='majority', authsource='admin', replicaset='atlas-g1kb91-shard-0', ssl=True), 'pith_studies_test'), 'consent')
-2021-03-25 17:56:12,046 INFO session: test, consent: Collection(Database(MongoClient(host=['cluster0-shard-00-02.fh4fj.mongodb.net:27017', 'cluster0-shard-00-00.fh4fj.mongodb.net:27017', 'cluster0-shard-00-01.fh4fj.mongodb.net:27017'], document_class=dict, tz_aware=False, connect=True, retrywrites=True, w='majority', authsource='admin', replicaset='atlas-g1kb91-shard-0', ssl=True), 'pith_studies_test'), 'consent')
-2021-03-25 17:56:17,949 INFO joined: meep
-2021-03-25 17:56:21,796 INFO consent: Collection(Database(MongoClient(host=['cluster0-shard-00-02.fh4fj.mongodb.net:27017', 'cluster0-shard-00-00.fh4fj.mongodb.net:27017', 'cluster0-shard-00-01.fh4fj.mongodb.net:27017'], document_class=dict, tz_aware=False, connect=True, retrywrites=True, w='majority', authsource='admin', replicaset='atlas-g1kb91-shard-0', ssl=True), 'pith_studies_test'), 'consent')
-2021-03-25 18:26:29,732 INFO session: test
-2021-03-25 18:26:38,331 INFO joined: meep
-2021-03-25 18:34:54,309 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 18:34:54,989 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 18:35:07,823 INFO session: test
-2021-03-25 18:35:19,159 INFO joined: meep
-2021-03-25 18:35:26,764 INFO end_consent
-2021-03-25 18:40:15,060 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 18:40:16,143 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 18:40:40,838 INFO session: test
-2021-03-25 18:40:50,835 INFO joined: meep
-2021-03-25 18:40:55,981 INFO end_consent
-2021-03-25 18:40:56,034 INFO meep consented True
-2021-03-25 18:51:25,716 INFO session: test
-2021-03-25 18:51:32,858 INFO joined: meep
-2021-03-25 18:51:40,512 INFO end_consent
-2021-03-25 18:51:40,513 INFO meep consented True
-2021-03-25 18:53:11,968 INFO session: test
-2021-03-25 18:53:21,326 INFO joined: meep
-2021-03-25 18:53:27,478 INFO end_consent
-2021-03-25 18:53:27,479 INFO meep consented True
-2021-03-25 18:56:54,636 INFO session: test
-2021-03-25 18:57:04,014 INFO joined: meep
-2021-03-25 18:57:10,839 INFO end_consent
-2021-03-25 18:57:10,840 INFO meep consented True
-2021-03-25 18:58:51,763 INFO session: test
-2021-03-25 18:59:00,952 INFO joined: meep
-2021-03-25 18:59:05,338 INFO end_consent
-2021-03-25 18:59:05,339 INFO meep consented True
-2021-03-25 19:01:52,930 INFO session: test
-2021-03-25 19:02:00,918 INFO joined: meep
-2021-03-25 19:02:07,199 INFO end_consent
-2021-03-25 19:02:07,201 INFO meep consented True
-2021-03-25 19:02:52,390 INFO session: test
-2021-03-25 19:02:59,122 INFO joined: meep
-2021-03-25 19:03:04,078 INFO end_consent
-2021-03-25 19:03:04,079 INFO meep consented True
-2021-03-25 19:04:43,086 INFO session: test
-2021-03-25 19:04:52,798 INFO joined: meep
-2021-03-25 19:04:56,853 INFO end_consent
-2021-03-25 19:04:56,855 INFO meep consented True
-2021-03-25 19:07:24,635 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 19:07:34,003 INFO session: test
-2021-03-25 19:07:43,304 INFO joined: meep
-2021-03-25 19:07:47,393 INFO end_consent
-2021-03-25 19:07:47,411 INFO meep consented True
-2021-03-25 19:07:54,786 INFO admin_initiate_ready
-2021-03-25 19:08:56,318 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 19:09:47,744 INFO session: test
-2021-03-25 19:09:56,420 INFO joined: meep
-2021-03-25 19:10:00,502 INFO end_consent
-2021-03-25 19:10:00,518 INFO meep consented True
-2021-03-25 19:10:08,633 INFO admin_initiate_ready
-2021-03-25 19:10:08,634 INFO admin_initiate_ready 2
-2021-03-25 19:11:26,519 INFO session: test
-2021-03-25 19:11:34,064 INFO joined: mepe
-2021-03-25 19:11:37,780 INFO end_consent
-2021-03-25 19:11:37,781 INFO mepe consented True
-2021-03-25 19:11:43,008 INFO admin_initiate_ready
-2021-03-25 19:11:43,008 INFO admin_initiate_ready 2
-2021-03-25 19:12:29,479 INFO session: test
-2021-03-25 19:14:21,674 INFO session: test
-2021-03-25 19:14:28,290 INFO joined: meep
-2021-03-25 19:16:11,428 INFO session: test
-2021-03-25 19:16:19,420 INFO joined: meep
-2021-03-25 19:16:24,608 INFO end_consent
-2021-03-25 19:16:24,609 INFO meep consented True
-2021-03-25 19:16:31,203 INFO admin_initiate_ready
-2021-03-25 19:16:31,203 INFO admin_initiate_ready 2
-2021-03-25 19:17:55,361 INFO session: test
-2021-03-25 19:18:44,685 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 19:18:53,769 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 19:18:59,968 INFO session: test
-2021-03-25 19:19:05,272 INFO start_disc 2021-03-25T19:19:05.271182+00:00
-2021-03-25 19:19:51,693 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 19:19:53,893 INFO session: test
-2021-03-25 19:19:56,723 INFO start_disc 2021-03-25T19:19:56.722504+00:00
-2021-03-25 19:20:48,017 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 19:20:49,606 INFO session: test
-2021-03-25 19:20:51,689 INFO start_disc {"start_disc": "2021-03-25T19:20:51.688119+00:00"}
-2021-03-25 19:22:17,835 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 19:22:18,906 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 19:22:35,510 INFO session: test
-2021-03-25 19:22:39,029 INFO start_disc {"start_disc": "2021-03-25T19:22:39.023020+00:00"}
-2021-03-25 19:23:24,715 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 19:23:27,754 INFO session: test
-2021-03-25 19:24:11,298 INFO session: test
-2021-03-25 19:24:39,210 INFO session: test
-2021-03-25 19:25:03,878 INFO session: test
-2021-03-25 19:25:11,648 INFO joined: meep
-2021-03-25 19:25:15,590 INFO end_consent
-2021-03-25 19:25:15,643 INFO meep consented True
-2021-03-25 19:25:21,190 INFO admin_initiate_ready
-2021-03-25 19:25:21,191 INFO admin_initiate_ready 2
-2021-03-25 19:27:03,026 INFO session: test
-2021-03-25 19:27:17,212 INFO joined: meep
-2021-03-25 19:27:21,508 INFO end_consent
-2021-03-25 19:27:21,509 INFO meep consented True
-2021-03-25 19:27:28,549 INFO admin_initiate_ready
-2021-03-25 19:27:28,549 INFO admin_initiate_ready 2
-2021-03-25 19:28:11,290 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
-2021-03-25 19:28:14,624 INFO session: test
-2021-03-25 19:28:22,524 INFO joined: meep
-2021-03-25 19:28:26,656 INFO end_consent
-2021-03-25 19:28:26,671 INFO meep consented True
-2021-03-25 19:28:32,220 INFO admin_initiate_ready
-2021-03-25 19:28:32,221 INFO admin_initiate_ready 2
-2021-03-25 19:29:54,558 INFO session: test
-2021-03-25 19:30:03,368 INFO joined: meep
-2021-03-25 19:30:07,453 INFO end_consent
-2021-03-25 19:30:07,454 INFO meep consented True
-2021-03-25 19:30:14,722 INFO admin_initiate_ready
-2021-03-25 19:30:14,722 INFO admin_initiate_ready 2
-2021-03-25 19:32:56,906 INFO session: test
-2021-03-25 19:33:05,103 INFO joined: meep
-2021-03-25 19:33:09,299 INFO end_consent
-2021-03-25 19:33:09,301 INFO meep consented True
-2021-03-25 19:33:14,933 INFO admin_initiate_ready
-2021-03-25 19:33:14,933 INFO admin_initiate_ready 2
+2021-03-25 22:11:45,643 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
+2021-03-25 22:11:46,667 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
+2021-03-25 22:12:17,330 INFO admin_study_setup(test)
+2021-03-25 22:12:27,654 INFO admin_set_prolific_link(https://google.com)
+2021-03-25 22:12:28,242 INFO admin_set_disc_link(https://google.com)
+2021-03-25 22:12:28,958 INFO admin_set_test_type(2)
+2021-03-25 22:12:36,128 INFO join_study(meep)
+2021-03-25 22:12:39,698 INFO end_consent(meep, True, True, True)
+2021-03-25 22:12:41,116 INFO end_instr(meep)
+2021-03-25 22:12:42,176 INFO end_tutorial(meep)
+2021-03-25 22:12:45,576 INFO admin_initiate_ready()
+2021-03-25 22:15:33,374 INFO admin_study_setup(test)
+2021-03-25 22:15:44,288 INFO join_study(meep)
+2021-03-25 22:15:48,338 INFO end_consent(meep, True, True, True)
+2021-03-25 22:15:49,762 INFO end_instr(meep)
+2021-03-25 22:15:51,200 INFO end_tutorial(meep)
+2021-03-25 22:15:55,828 INFO admin_initiate_ready()
+2021-03-25 22:17:13,875 INFO admin_study_setup(test)
+2021-03-25 22:17:20,843 INFO join_study(meep)
+2021-03-25 22:17:24,521 INFO end_consent(meep, True, True, True)
+2021-03-25 22:17:26,369 INFO end_instr(meep)
+2021-03-25 22:17:27,728 INFO end_tutorial(meep)
+2021-03-25 22:17:32,638 INFO admin_initiate_ready()
+2021-03-25 22:18:34,926 INFO admin_study_setup(test)
+2021-03-25 22:18:42,384 INFO join_study(meep)
+2021-03-25 22:18:46,179 INFO end_consent(meep, True, True, True)
+2021-03-25 22:18:47,906 INFO end_instr(meep)
+2021-03-25 22:18:48,984 INFO end_tutorial(meep)
+2021-03-25 22:18:52,421 INFO admin_initiate_ready()
+2021-03-25 22:19:25,423 INFO admin_study_setup(test)
+2021-03-25 22:19:32,938 INFO join_study(meep)
+2021-03-25 22:19:36,702 INFO end_consent(meep, True, True, True)
+2021-03-25 22:19:38,098 INFO end_instr(meep)
+2021-03-25 22:19:39,391 INFO end_tutorial(meep)
+2021-03-25 22:19:42,618 INFO admin_initiate_ready()
+2021-03-25 22:26:13,014 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
+2021-03-25 22:30:52,232 INFO admin_study_setup(test)
+2021-03-25 22:43:11,128 INFO admin_study_setup(test)
+2021-03-25 22:43:19,586 INFO join_study(meep)
+2021-03-25 22:43:25,650 INFO end_consent(meep, True, True, True)
+2021-03-25 22:43:29,067 INFO end_instr(meep)
+2021-03-25 22:43:32,448 INFO end_tutorial(meep)
+2021-03-25 22:43:35,371 INFO admin_initiate_ready()
+2021-03-25 22:44:13,246 INFO admin_study_setup(test)
+2021-03-25 22:44:21,620 INFO join_study(meep)
+2021-03-25 22:44:25,282 INFO end_consent(meep, True, True, True)
+2021-03-25 22:44:26,690 INFO end_instr(meep)
+2021-03-25 22:44:27,694 INFO end_tutorial(meep)
+2021-03-25 22:44:31,348 INFO admin_initiate_ready()
+2021-03-25 22:44:33,997 INFO end_waiting(meep)
+2021-03-25 22:44:36,586 INFO admin_start_disc()
+2021-03-25 22:44:42,340 INFO admin_end_disc()
+2021-03-25 22:46:08,180 INFO admin_study_setup(test)
+2021-03-25 22:46:52,211 INFO join_study(meep)
+2021-03-25 22:46:55,648 INFO end_consent(meep, True, True, True)
+2021-03-25 22:46:56,971 INFO end_instr(meep)
+2021-03-25 22:46:58,097 INFO end_tutorial(meep)
+2021-03-25 22:47:02,330 INFO admin_initiate_ready()
+2021-03-25 22:47:04,022 INFO admin_start_disc()
+2021-03-25 22:49:12,211 INFO admin_study_setup(test)
+2021-03-25 22:49:18,932 INFO join_study(meep)
+2021-03-25 22:49:22,560 INFO end_consent(meep, True, True, True)
+2021-03-25 22:49:23,982 INFO end_instr(meep)
+2021-03-25 22:49:25,013 INFO end_tutorial(meep)
+2021-03-25 22:49:28,244 INFO admin_initiate_ready()
+2021-03-25 22:49:30,263 INFO admin_start_disc()
+2021-03-25 22:50:17,947 INFO admin_study_setup(test)
+2021-03-25 22:50:24,409 INFO join_study(meep)
+2021-03-25 22:50:27,929 INFO end_consent(meep, True, True, True)
+2021-03-25 22:50:29,362 INFO end_instr(meep)
+2021-03-25 22:50:30,728 INFO end_tutorial(meep)
+2021-03-25 22:50:33,516 INFO admin_initiate_ready()
+2021-03-25 22:50:37,026 INFO admin_start_disc()
+2021-03-25 22:51:41,046 INFO admin_study_setup(test)
+2021-03-25 22:51:47,748 INFO join_study(meep)
+2021-03-25 22:51:51,153 INFO end_consent(meep, True, True, True)
+2021-03-25 22:51:52,443 INFO end_instr(meep)
+2021-03-25 22:51:53,563 INFO end_tutorial(meep)
+2021-03-25 22:51:56,148 INFO admin_initiate_ready()
+2021-03-25 22:51:56,850 INFO admin_start_disc()
+2021-03-25 22:52:41,069 INFO admin_study_setup(test)
+2021-03-25 22:52:54,777 INFO join_study(meep)
+2021-03-25 22:52:58,394 INFO end_consent(meep, True, True, True)
+2021-03-25 22:52:59,923 INFO end_instr(meep)
+2021-03-25 22:53:01,119 INFO end_tutorial(meep)
+2021-03-25 22:53:05,578 INFO admin_initiate_ready()
+2021-03-25 22:53:07,429 INFO admin_start_disc()
+2021-03-25 22:57:42,134 INFO admin_study_setup(test)
+2021-03-25 22:57:50,255 INFO join_study(meep)
+2021-03-25 22:57:54,113 INFO end_consent(meep, True, True, True)
+2021-03-25 22:57:55,610 INFO end_instr(meep)
+2021-03-25 22:57:56,797 INFO end_tutorial(meep)
+2021-03-25 22:58:00,297 INFO admin_initiate_ready()
+2021-03-25 22:58:08,710 INFO admin_start_disc()
+2021-03-25 22:58:44,470 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
+2021-03-25 22:58:45,484 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
+2021-03-25 22:59:05,609 INFO admin_study_setup(test)
+2021-03-25 22:59:12,171 INFO join_study(meep)
+2021-03-25 22:59:15,417 INFO end_consent(meep, True, True, True)
+2021-03-25 22:59:16,735 INFO end_instr(meep)
+2021-03-25 22:59:17,913 INFO end_tutorial(meep)
+2021-03-25 22:59:20,966 INFO admin_initiate_ready()
+2021-03-25 22:59:23,941 INFO admin_start_disc()
+2021-03-25 22:59:30,401 INFO admin_end_disc()
+2021-03-25 22:59:42,794 INFO admin_study_setup(test)
+2021-03-25 22:59:49,275 INFO join_study(meep)
+2021-03-25 22:59:52,371 INFO end_consent(meep, True, True, True)
+2021-03-25 22:59:53,575 INFO end_instr(meep)
+2021-03-25 22:59:54,489 INFO end_tutorial(meep)
+2021-03-25 22:59:57,295 INFO admin_initiate_ready()
+2021-03-25 22:59:59,811 INFO end_waiting(meep)
+2021-03-25 23:00:04,663 INFO admin_start_disc()
+2021-03-25 23:00:08,571 INFO admin_end_disc()
+2021-03-25 23:03:00,589 INFO admin_study_setup(test)
+2021-03-25 23:03:10,402 INFO admin_set_prolific_link(https://google.com)
+2021-03-25 23:03:11,014 INFO admin_set_disc_link(https://google.com)
+2021-03-25 23:03:11,666 INFO admin_set_test_type(2)
+2021-03-25 23:03:17,957 INFO join_study(meep)
+2021-03-25 23:03:22,340 INFO end_consent(meep, True, True, True)
+2021-03-25 23:03:24,447 INFO end_instr(meep)
+2021-03-25 23:03:25,533 INFO end_tutorial(meep)
+2021-03-25 23:03:28,151 INFO admin_initiate_ready()
+2021-03-25 23:03:30,318 INFO end_waiting(meep)
+2021-03-25 23:03:32,556 INFO admin_start_disc()
+2021-03-25 23:03:36,867 INFO admin_end_disc()
+2021-03-25 23:05:48,287 INFO Mongo: mongodb://root:example@mongo:27017/?authSource=admin pith_studies
+2021-03-25 23:05:55,168 INFO admin_study_setup(test)
+2021-03-25 23:06:03,706 INFO join_study(meep)
+2021-03-25 23:06:07,133 INFO end_consent(meep, True, True, True)
+2021-03-25 23:06:08,624 INFO end_instr(meep)
+2021-03-25 23:06:09,936 INFO end_tutorial(meep)
+2021-03-25 23:06:12,686 INFO admin_initiate_ready()
+2021-03-25 23:06:14,679 INFO end_waiting(meep)
+2021-03-25 23:06:16,730 INFO admin_start_disc()
+2021-03-25 23:06:20,045 INFO admin_end_disc()
+2021-03-25 23:06:25,794 INFO end_survey_task(meep, {'response0': 'hi', 'response1': None, 'response2': None, 'response3': None, 'response4': None, 'response5': None})
+2021-03-25 23:06:36,350 INFO admin_set_prolific_link(https://google.com)
+2021-03-25 23:06:39,662 INFO end_survey_pith(meep, {'response1': None, 'response2': None, 'response3': None, 'response4': None, 'response5': None})
+2021-03-25 23:16:29,354 INFO end_consent(, True, True, True)
+2021-03-25 23:23:34,555 INFO end_consent(, True, True, True)
+2021-03-25 23:24:12,054 INFO end_instr()
+2021-03-25 23:24:24,154 INFO end_tutorial()
+2021-03-25 23:25:24,459 INFO admin_study_setup(test)
+2021-03-25 23:35:14,758 INFO join_study(meep)
+2021-03-25 23:43:26,311 INFO end_consent(, True, True, True)
+2021-03-25 23:43:28,189 INFO end_instr()
+2021-03-25 23:45:31,539 INFO join_study(meep)
+2021-03-25 23:47:49,251 INFO end_consent(, True, True, True)
+2021-03-25 23:47:51,581 INFO end_instr()
+2021-03-25 23:47:53,067 INFO end_tutorial()
+2021-03-25 23:48:07,193 INFO admin_study_setup(test)
+2021-03-25 23:48:16,928 INFO join_study(meep)
+2021-03-25 23:48:20,903 INFO end_consent(meep, True, True, True)
+2021-03-25 23:48:22,424 INFO end_instr(meep)
+2021-03-25 23:48:23,798 INFO end_tutorial(meep)
+2021-03-25 23:48:28,692 INFO admin_initiate_ready()
+2021-03-25 23:48:32,259 INFO end_waiting(meep)
+2021-03-25 23:48:35,311 INFO admin_start_disc()
+2021-03-25 23:48:40,748 INFO admin_end_disc()
+2021-03-26 00:00:58,942 INFO end_survey_task(, {'response0': 'hi', 'response1': None, 'response2': None, 'response3': None, 'response4': None, 'response5': None})
+2021-03-26 00:04:32,077 INFO end_survey_pith(, {'response1': None, 'response2': None, 'response3': None, 'response4': None, 'response5': None})
+2021-03-26 00:05:55,485 INFO join_study(meep)
+2021-03-26 00:07:50,093 INFO join_study(meep)
+2021-03-26 00:07:55,911 INFO end_consent(meep, True, True, True)
+2021-03-26 00:09:00,211 INFO end_instr()
+2021-03-26 00:09:01,936 INFO end_tutorial()
+2021-03-26 00:09:21,681 INFO end_survey_task(, {'response0': 'meep', 'response1': None, 'response2': None, 'response3': None, 'response4': None, 'response5': None})
+2021-03-26 00:09:26,115 INFO end_survey_pith(, {'response1': None, 'response2': None, 'response3': None, 'response4': None, 'response5': None})
+2021-03-26 01:45:21,888 INFO join_study(meep)
+2021-03-26 01:46:53,942 INFO end_consent(meep, True, True, True)
+2021-03-26 01:47:06,174 INFO end_instr(meep)
+2021-03-26 01:47:08,293 INFO end_tutorial(meep)
+2021-03-26 01:48:03,454 INFO end_survey_task(, {'response0': 'car', 'response1': 'we wanted everything', 'response2': 2, 'response3': 5, 'response4': 1, 'response5': 'hi christian <3333'})
+2021-03-26 01:49:17,822 INFO end_survey_pith(, {'response1': 'everything', 'response2': 'moar christian', 'response3': "christian's nice smile", 'response4': 'why was there not more christiannnnn', 'response5': 'hi christian'})

@@ -11,10 +11,3 @@
 
   <button on:click={onContinue}>Continue</button>
 </div>
-
-<style>
-  .container-outer {
-    padding: 40px;
-  }
-</style>
-

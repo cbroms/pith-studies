@@ -8,7 +8,7 @@
   onMount(() => {
     const url = new URL(window.location.href);
     pid = url.searchParams.get("PROLIFIC_PID");
-    studyStore.subscribeStudy();
+    studyStore.subscribeStudy(pid);
   });
 
   const onContinue = async () => {
@@ -17,11 +17,11 @@
   };
 </script>
 
-<h1>Welcome!</h1>
+<div class="container-outer">
+  <h1>Welcome!</h1>
 
-<p>Ensure your Prolific ID is entered correctly, then press continue.</p>
+  <h3>Please enter your Prolific ID. Make sure it is entered correctly before pressing continue. </h3>
+  <input bind:value={pid} />
 
-<label for="pid">Please enter your Prolific ID: </label>
-<input name="pid" bind:value={pid} />
-
-<button disapbled={!pressed} on:click={onContinue}>Continue</button>
+  <button on:click={onContinue}>Continue</button>
+</div>

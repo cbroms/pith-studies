@@ -42,7 +42,8 @@ def get_time():
   return datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).isoformat()
 
 """ Reset. """
-global session, test_type, disc_link, prolific_link
+global session
+global test_type, disc_link, prolific_link
 global start_disc, end_disc
 session = None
 test_type = None
@@ -52,7 +53,8 @@ start_disc = None
 end_disc = None
 
 db = client["pith_studies"]
-params = db["params"]
+#sessions = db["sessions"]
+#params = db["params"]
 consent = db["consent"]
 survey_task = db["survey_task"]
 survey_pith = db["survey_pith"]
@@ -66,51 +68,67 @@ class AdminNamespace(AsyncNamespace):
         "time": current,
         "test_type": test_type, 
         "disc_link": disc_link, 
-        "prolific_link": prolific_link
+        "prolific_link": prolific_link,
+        "start_disc": start_disc,
+        "end_disc": end_disc
       }
 
     async def on_admin_study_setup(self, sid, request):
       """ Do this before Prolific study is even published. """
-      global session
-
       session = request["session"]
+      logger.info("admin_study_setup({})".format(session))
+      # insert if needed
+      #sessions.update_one({"session": session}, {}, upsert=True)
       self.enter_room(sid, ADMIN_ROOM)
       # save data under given test session
-      logger.info("session: {}".format(session))
+      return {}
 
     async def on_admin_set_test_type(self, sid, request):
       """ Do this before people get to tutorials. """
       global test_type 
 
       test_type = request["test_type"]
-      params.insert_one(self.generate_params())
+      logger.info("admin_set_test_type({})".format(test_type))
+      # params.insert_one(self.generate_params())
+      result = {"test_type": test_type}
+      result = dumps(result, cls=JSONEncoder)
+      return result
 
     async def on_admin_set_disc_link(self, sid, request):
       """ Do this before people get to discussion. """
       global disc_link 
 
       disc_link = request["disc_link"]
-      params.insert_one(self.generate_params())
+      logger.info("admin_set_disc_link({})".format(disc_link))
+      #params.insert_one(self.generate_params())
+      result = {"disc_link": disc_link}
+      result = dumps(result, cls=JSONEncoder)
+      return result
 
     async def on_admin_set_prolific_link(self, sid, request):
       """ Do this before people finish study. """
       global prolific_link 
 
       prolific_link = request["prolific_link"]
-      params.insert_one(self.generate_params())
+      logger.info("admin_set_prolific_link({})".format(prolific_link))
+      #params.insert_one(self.generate_params())
+      result = {"prolific_link": prolific_link}
+      result = dumps(result, cls=JSONEncoder)
+      return result
 
     async def on_admin_initiate_ready(self, sid, request):
-      logger.info("admin_initiate_ready")
+      logger.info("admin_initiate_ready()")
       result = {}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "admin_initiate_ready", result, namespace=STUDY_NS, room=TESTER_ROOM
       )
-      logger.info("admin_initiate_ready 2")
+      return {}
 
     async def on_admin_start_disc(self, sid, request):
       global start_disc 
 
+      logger.info("admin_start_disc()")
       start_disc = get_time()
       result = {"disc_link": disc_link}
       result = dumps(result, cls=JSONEncoder)
@@ -124,6 +142,7 @@ class AdminNamespace(AsyncNamespace):
     async def on_admin_end_disc(self, sid, request):
       global end_disc 
 
+      logger.info("admin_end_disc()")
       end_disc = get_time()
       result = {}
       result = dumps(result, cls=JSONEncoder)
@@ -135,8 +154,10 @@ class AdminNamespace(AsyncNamespace):
       return result
 
     async def on_admin_study_teardown(self, sid, request):
+      logger.info("admin_study_teardown()")
       self.close_room(TESTER_ROOM, namespace=STUDY_NS)
       self.leave_room(sid, ADMIN_ROOM)
+      return {}
 
 sio.register_namespace(AdminNamespace(ADMIN_NS))
 
@@ -145,20 +166,23 @@ class StudyNamespace(AsyncNamespace):
 
     async def on_join_study(self, sid, request):
       participant_id = request["participant_id"]
+      logger.info("join_study({})".format(participant_id))
       result = {"participant_id": participant_id}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "join_study", result, namespace=ADMIN_NS, room=ADMIN_ROOM
       )
       self.enter_room(sid, TESTER_ROOM)
-      logger.info("joined: {}".format(participant_id))
+      return {}
 
     async def on_end_consent(self, sid, request):
-      logger.info("end_consent")
       participant_id = request["participant_id"]
       response1 = request["response1"]
       response2 = request["response2"]
       response3 = request["response3"]
+      logger.info("end_consent({}, {}, {}, {})".format(
+        participant_id, response1, response2, response3
+      ))
       accepted = response1 and response2 and response3
       consent.insert_one({
         "session": session,
@@ -175,11 +199,11 @@ class StudyNamespace(AsyncNamespace):
       )
       result = {"accepted": accepted}
       result = dumps(result, cls=JSONEncoder)
-      logger.info("{} consented {}".format(participant_id, accepted))
       return result
 
     async def on_end_instr(self, sid, request):
       participant_id = request["participant_id"]
+      logger.info("end_instr({})".format(participant_id))
       result = {"participant_id": participant_id}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
@@ -191,23 +215,58 @@ class StudyNamespace(AsyncNamespace):
 
     async def on_end_tutorial(self, sid, request):
       participant_id = request["participant_id"]
+      logger.info("end_tutorial({})".format(participant_id))
       result = {"participant_id": participant_id}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "end_tutorial", result, namespace=ADMIN_NS, room=ADMIN_ROOM
       )
+      return {}
 
     async def on_end_waiting(self, sid, request):
       participant_id = request["participant_id"]
+      logger.info("end_waiting({})".format(participant_id))
       result = {"participant_id": participant_id}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "end_waiting", result, namespace=ADMIN_NS, room=ADMIN_ROOM
       )
+      return {}
+
+    async def ready_disc(self, sid, request):
+      participant_id = request["participant_id"]
+      logger.info("ready_disc({})".format(participant_id))
+      result = {"participant_id": participant_id}
+      result = dumps(result, cls=JSONEncoder)
+      await self.emit(
+        "ready_disc", result, namespace=ADMIN_NS, room=ADMIN_ROOM
+      )
+      return {}
+
+    async def start_disc(self, sid, request):
+      participant_id = request["participant_id"]
+      logger.info("start_disc({})".format(participant_id))
+      result = {"participant_id": participant_id}
+      result = dumps(result, cls=JSONEncoder)
+      await self.emit(
+        "start_disc", result, namespace=ADMIN_NS, room=ADMIN_ROOM
+      )
+      return {}
+
+    async def end_disc(self, sid, request):
+      participant_id = request["participant_id"]
+      logger.info("end_disc({})".format(participant_id))
+      result = {"participant_id": participant_id}
+      result = dumps(result, cls=JSONEncoder)
+      await self.emit(
+        "end_disc", result, namespace=ADMIN_NS, room=ADMIN_ROOM
+      )
+      return {}
 
     async def on_end_survey_task(self, sid, request):
       participant_id = request["participant_id"]
       answers = request["answers"]
+      logger.info("end_survey_task({}, {})".format(participant_id, answers))
       survey_task.insert_one({
         "session": session, "participant_id": participant_id, "answers": answers
       })
@@ -216,10 +275,12 @@ class StudyNamespace(AsyncNamespace):
       await self.emit(
         "end_survey_task", result, namespace=ADMIN_NS, room=ADMIN_ROOM
       )
+      return {}
 
     async def on_end_survey_pith(self, sid, request):
       participant_id = request["participant_id"]
       answers = request["answers"]
+      logger.info("end_survey_pith({}, {})".format(participant_id, answers))
       survey_pith.insert_one(
         {"session": session, "participant_id": participant_id, "answers": answers}
       )

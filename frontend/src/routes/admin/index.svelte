@@ -1,10 +1,13 @@
 <script>
   import { goto } from "@sapper/app";
+
   import { adminStore } from "../../stores/adminStore";
+
   let studyNumber = "";
 
   const onSubmit = async () => {
     await adminStore.createStudy(studyNumber);
+    adminStore.subscribeProgress();
     goto(`admin/${studyNumber}`);
   };
 </script>

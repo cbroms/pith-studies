@@ -37,13 +37,13 @@
     ) {
       goto(`/study/${id}/waiting`);
     } else if ($studyStore.step === steps.DISCUSSION) {
-      goto(`study/${id}/discussion`);
+      goto(`study/${id}/discussion`); // TODO
     } else if ($studyStore.step === steps.SURVEY_TASK) {
       goto(`/study/${id}/surveyTask`);
     } else if ($studyStore.step === steps.SURVEY_PITH) {
       goto(`/study/${id}/surveyPith`);
     } else if ($studyStore.step === steps.DONE) {
-
+      goto($studyStore.endRedirectURL);
     } else if ($studyStore.step === steps.CANCEL) {
 
     }

@@ -1,14 +1,17 @@
  mongodb+srv://pith_studies_admin:<password>@cluster0.fh4fj.mongodb.net/pith_studies?retryWrites=true&w=majority
 
 TODO:
-- redirect to completion link
 - iFrame with discussion link
-- instead of admin assuming ready, start, end works, should do a handshake
 - save parameters better in server => have a session actually mean something
   so could theoretically host multiple discussions at once
-- should probably return with success or error
-- required questions that prevent one from continuing
-- having instructions or something in waiting room
 - check that no matter how user interacts with interface, is robust (i.e. the 
   if consent form checkboxes are closed/opened)
 - connect to atlas mongo with link above and change password!!!
+- some mechanism to encourage people to click the ready button on waiting
+X make buttons bigger and stuff easier to interact with
+X having instructions or something in waiting room
+X submitting a parameter causes complete rerender of page :(
+X redirect to completion link
+X instead of admin assuming ready, start, end works, should do a handshake
+X should probably return with success or error
+X required questions that prevent one from continuing

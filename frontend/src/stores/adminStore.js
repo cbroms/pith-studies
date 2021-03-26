@@ -5,6 +5,9 @@ import { adminSocket } from "./socket";
 
 const defaultState = {
   sid: "",
+  testType: 0,
+  discLink: "",
+  completionLink: "",
   startDisc: null,
   endDisc: null,
   consentList: [],
@@ -34,74 +37,95 @@ export const adminStore = createDerivedSocketStore(
           });
           resolve();
         });
-      };
+      }
     },
     setTestType: (testType, resolve, reject) => {
+      console.log("setTestType");
       return (socket, update) => {
         socket.emit("admin_set_test_type", { test_type: testType }, 
-          (res) => { resolve(); }
+          (res) => { 
+            const json = JSON.parse(res);
+            console.log("done", json.test_type);
+            update((s) => {
+              return { ...s, testType: json.test_type };
+            });
+            resolve(); 
+          }
         );
       }
     },
     setDiscLink: (discLink, resolve, reject) => {
       return (socket, update) => {
-        socket.emit("admin_set_disc_link", { disc_link: discLink }, (res) => {
-          resolve();
-        });
+        socket.emit("admin_set_disc_link", { disc_link: discLink }, 
+          (res) => {
+            const json = JSON.parse(res);
+            update((s) => {
+              return { ...s, discLink: json.disc_link };
+            });
+            resolve();
+          }
+        );
       }
     },
     setProlificLink: (prolificLink, resolve, reject) => {
       return (socket, update) => {
         socket.emit("admin_set_prolific_link", { prolific_link: prolificLink }, 
-          (res) => { resolve(); }
+          (res) => { 
+            const json = JSON.parse(res);
+            update((s) => {
+              return { ...s, prolificLink: json.prolific_link };
+            });
+            resolve(); 
+          }
         );
       }
     },
     readyDisc: (resolve, reject) => {
-      console.log("ready_disc");
+      console.log("admin_initiate_ready");
       return (socket, update) => {
         socket.emit("admin_initiate_ready", {}, (res) => { 
           update((s) => {
             return { 
-              ...s, 
+              ...s,  
               waitingList: [],
-              readyList: [...s.waitingList] // transfer 
-            };
+              readyList: [...s.waitingList],
+            }
           });
           resolve(); 
         });
       }
     },
     startDisc: (resolve, reject) => { // consider adding a handshake
+      console.log("admin_start_disc");
       return (socket, update) => {
-        socket.emit("admin_start_disc", {}, (res) => {
-          console.log("start_disc", res);
+        socket.emit("admin_start_disc", {}, (res) => { 
+          const json = JSON.parse(res);
           update((s) => {
-            const json = JSON.parse(res);
             return { 
-              ...s, 
+              ...s,  
               startDisc: json.start_disc,
               readySubList: [],
-              discussionList: [...s.readySubList] // transfer 
+              discussionList: [...s.readySubList],
             };
           });
-          resolve();
+          resolve(); 
         });
       }
     },
     endDisc: (resolve, reject) => { // consider adding a handshake
+      console.log("admin_end_disc");
       return (socket, update) => {
-        socket.emit("admin_end_disc", {}, (res) => {
+        socket.emit("admin_end_disc", {}, (res) => { 
+          const json = JSON.parse(res);
           update((s) => {
-            const json = JSON.parse(res);
             return { 
-              ...s, 
-              endDisc: json.end_disc, 
+              ...s,  
+              endDisc: json.end_disc,
               discussionList: [],
-              surveyTaskList: [...s.discussionList] // transfer 
+              surveyTaskList: [...s.discussionList],
             };
           });
-          resolve();
+          resolve(); 
         });
       }
     },
@@ -173,6 +197,22 @@ export const adminStore = createDerivedSocketStore(
             };
           });
         });
+        /*
+        socket.on("ready_disc", (res) => {
+          const json = JSON.parse(res);
+          const waitingList = [...s.waitingList].filter(
+            (e) => !json.participant_id
+          );
+          update((s) => {
+            return { 
+              ...s, 
+              waitingList: waitingList,
+              readyList: [...s.readyList, json.participant_id] // transfer 
+            };
+          });
+          resolve(); 
+        }); 
+        */
         socket.on("end_waiting", (res) => {
           const json = JSON.parse(res);
           update((s) => {
@@ -186,6 +226,35 @@ export const adminStore = createDerivedSocketStore(
             };
           });
         });
+        /*
+        socket.on("start_disc", (res) => {
+          update((s) => {
+            const json = JSON.parse(res);
+            console.log("start_disc");
+            const readySubList = [...s.readySubList].filter(
+              (e) => !json.participant_id
+            );
+            return { 
+              ...s, 
+              readySubList: readySubList,
+              discussionList: [...s.discussionList, json.participant_id] // transfer 
+            };
+          });
+        });
+        socket.on("end_disc", (res) => {
+          update((s) => {
+            const json = JSON.parse(res);
+            const discussionList = [...s.discussionList].filter(
+              (e) => !json.participant_id
+            );
+            return { 
+              ...s, 
+              discussionList: discussionList,
+              surveyTaskList: [...s.surveyTaskList, json.participant_id] // transfer 
+            };
+          });
+        });
+        */
         socket.on("end_survey_task", (res) => {
           const json = JSON.parse(res);
           update((s) => {

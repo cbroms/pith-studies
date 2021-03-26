@@ -29,16 +29,12 @@
   <ol>
     <li>
       <em>(Required)</em> Please input the nickname you used during the discussion.
-      <form>
-        <input bind:value={response0} />
-      </form>
+      <div class="answer"><input bind:value={response0} /></div>
     </li>
     <li>
       Please report the items your group decided to include in the final
       ranking. Justify each item in about a sentence.
-      <form>
-        <textarea bind:value={response1} />
-      </form>
+      <div class="answer"><textarea bind:value={response1} /></div>
     </li>
   </ol>
 
@@ -46,55 +42,43 @@
   <ol>
     <li>
       Please rate how good you think the group plan is (1-5).
-      <form>
+      <div class="answer">
         <label class="option">1<input type="radio" bind:group={response2} value={1} /></label>
         <label class="option">2<input type="radio" bind:group={response2} value={2} /></label>
         <label class="option">3<input type="radio" bind:group={response2} value={3} /></label>
         <label class="option">4<input type="radio" bind:group={response2} value={4} /></label>
         <label class="option">5<input type="radio" bind:group={response2} value={5} /></label>
-      </form>
+      </div>
     </li>
     <li>
       Please rate how much you feel you have contributed to the group discussion
       (1-5).
-      <form>
+      <div class="answer">
         <label class="option">1<input type="radio" bind:group={response3} value={1} /></label>
         <label class="option">2<input type="radio" bind:group={response3} value={2} /></label>
         <label class="option">3<input type="radio" bind:group={response3} value={3} /></label>
         <label class="option">4<input type="radio" bind:group={response3} value={4} /></label>
         <label class="option">5<input type="radio" bind:group={response3} value={5} /></label>
-      </form>
+      </div>
     </li>
     <li>
       Please rate how much you felt your ideas were heard by the group (1-5).
-      <form>
+      <div class="answer">
         <label class="option">1<input type="radio" bind:group={response4} value={1} /></label>
         <label class="option">2<input type="radio" bind:group={response4} value={2} /></label>
         <label class="option">3<input type="radio" bind:group={response4} value={3} /></label>
         <label class="option">4<input type="radio" bind:group={response4} value={4} /></label>
         <label class="option">5<input type="radio" bind:group={response4} value={5} /></label>
-      </form>
+      </div>
     </li>
   </ol>
 
   <em>Please note down any other observations you would like to share.</em>
-  <form>
+  <div class="answer">
     <textarea bind:value={response5} />
-  </form>
+  </div>
 
-  <!-- Give error if response0, for nickname, is null. -->
-  <div><button on:click={onContinue}>Continue</button></div>
+  {#if response0}
+    <div><button on:click={onContinue}>Continue</button></div>
+  {/if}
 </div>
-
-<style>
-  textarea {
-    box-sizing: border-box;
-    width: 100%;
-  }
-  .option {
-    display: inline-block;
-  }
-  .container-outer {
-    padding: 40px;
-  }
-</style>
