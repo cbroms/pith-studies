@@ -6,6 +6,11 @@
 </script>
 
 <script>
+  import { onMount } from "svelte";
+  import { goto } from "@sapper/app";
+
+  import { parseTime } from "../../utils/parseTime";
+
   import { adminStore } from "../../stores/adminStore";
 
   export let id;
@@ -14,32 +19,46 @@
   let completionLink = null;
   let testType = null;
 
+  onMount(async () => {
+    await adminStore.checkSession(id);
+    if ($adminStore.valid) {
+      adminStore.subscribeProgress(id);
+    }
+    else {
+      goto("/404");
+    }
+  });
+
   const onDiscLink = async () => {
-    await adminStore.setDiscLink(discLink);
+    await adminStore.setDiscLink(id, discLink);
   };
   const onCompletionLink = async () => {
-    await adminStore.setProlificLink(completionLink);
+    await adminStore.setProlificLink(id, completionLink);
   };
   const onTestType = async () => {
-    await adminStore.setTestType(testType);
+    await adminStore.setTestType(id, testType);
   };
   const onReadyDisc = async () => {
-    await adminStore.readyDisc();
+    await adminStore.readyDisc(id);
   }
   const onStartDisc = async () => {
-    await adminStore.startDisc();
+    await adminStore.startDisc(id);
   }
   const onEndDisc = async () => {
-    await adminStore.endDisc();
+    await adminStore.endDisc(id);
   }
   const onFinishStudy = async () => {
-    await adminStore.teardownStudy();
+    await adminStore.teardownStudy(id);
   }
 
 </script>
 
 <div class="admin-panel">
-  <h1>Admin: <em>{id}</em></h1>
+  {#if $adminStore.finish}
+    <h1 style="text-decoration: line-through;">Admin: <em>{id}</em></h1>
+  {:else}
+    <h1>Admin: <em>{id}</em></h1>
+  {/if}
 
   <div>
     <div class="panel">
@@ -74,12 +93,12 @@
 
         <div>
           {#if $adminStore.startDisc}
-            <h5>Start Time: {$adminStore.startDisc}</h5>
+            <h5>Start Time: {parseTime($adminStore.startDisc)}</h5>
           {:else}
             <h5>Start Time: ---</h5>
           {/if}
           {#if $adminStore.endDisc}
-            <h5>End Time: {$adminStore.endDisc}</h5>
+            <h5>End Time: {parseTime($adminStore.endDisc)}</h5>
           {:else}
             <h5>End Time: ---</h5>
           {/if}
@@ -96,9 +115,9 @@
       <div class="progress">
         <div class="column" style="margin-left: -2px">
           <div class="column-inner">
-            <h5>Cancelled</h5>
+            <h5>Start</h5>
             <ul>
-                {#each $adminStore.cancelList as pid (pid)}
+                {#each $adminStore.startList as pid (pid)}
                   <li>{pid}</li>
                 {/each}
             </ul>
@@ -262,11 +281,11 @@
     margin: 5px;
   }
   .disc_buttons {
+    margin: 5px 0;
     display: flex;
-    padding: 10px;
   }
   .disc_button {
-    margin: 5px;
+    margin-right: 10px;
     width: 75px;
   }
   button {

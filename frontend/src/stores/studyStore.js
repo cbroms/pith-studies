@@ -4,6 +4,8 @@ import { studySocket } from "./socket";
 import { steps } from "../steps/steps";
 
 const defaultState = {
+  valid: null,
+  session: "",
   pid: "",
   step: steps.WELCOME,
   endRedirectURL: "",
@@ -14,18 +16,33 @@ const defaultState = {
 export const studyStore = createDerivedSocketStore(
   studySocket,
   {
-    joinStudy: (pid, resolve, reject) => {
+    checkSession: (session, pid, resolve, reject) => {
+      if (!pid)
+        pid = "default";
+      return (socket, update) => {
+        socket.emit("test_connect", {session, participant_id: pid}, (res) => {
+          const json = JSON.parse(res);
+          console.log("valid", json.valid);
+          update((s) => {
+            return { ...s, valid: json.valid };
+          });
+          resolve();
+        });
+      }
+    },
+    joinStudy: (session, pid, resolve, reject) => {
       return (socket, update) => {
         console.log("join_study");
-        socket.emit("join_study", { participant_id: pid }, (res) => {
+        socket.emit("join_study", { session, participant_id: pid }, (res) => {
           // this should always work
           update((s) => {
-            return { ...s, step: steps.CONSENT, pid: pid };
+            return { ...s, session: session, step: steps.CONSENT, pid: pid };
           });
         });
       };
     },
     consentComplete: (
+      session,
       pid,
       response1,
       response2,
@@ -38,7 +55,7 @@ export const studyStore = createDerivedSocketStore(
 
         socket.emit(
           "end_consent",
-          { participant_id: pid, response1, response2, response3 },
+          { session, participant_id: pid, response1, response2, response3 },
           (res) => {
             const json = JSON.parse(res);
             console.log("moving to instructions", json.accepted);
@@ -58,12 +75,12 @@ export const studyStore = createDerivedSocketStore(
         );
       };
     },
-    instructionsComplete: (pid, resolve, reject) => {
+    instructionsComplete: (session, pid, resolve, reject) => {
       return (socket, update) => {
         console.log("instructions_complete", pid);
         socket.emit(
           "end_instr",
-          { participant_id: pid },
+          { session, participant_id: pid },
           (res) => {
             const json = JSON.parse(res);
             update((s) => {
@@ -74,12 +91,12 @@ export const studyStore = createDerivedSocketStore(
         );
       };
     },
-    tutorialComplete: (pid, resolve, reject) => {
+    tutorialComplete: (session, pid, resolve, reject) => {
       return (socket, update) => {
         console.log("tutorial_complete", pid);
         socket.emit(
           "end_tutorial",
-          { participant_id: pid },
+          { session, participant_id: pid },
           (res) => {
             update((s) => {
               return { ...s, step: steps.WAITING_ROOM };
@@ -89,12 +106,12 @@ export const studyStore = createDerivedSocketStore(
         );
       };
     },
-    readyComplete: (pid, resolve, reject) => {
+    readyComplete: (session, pid, resolve, reject) => {
       return (socket, update) => {
         console.log("ready_complete", pid);
         socket.emit(
           "end_waiting",
-          { participant_id: pid },
+          { session, participant_id: pid },
           (res) => {
             update((s) => {
               return { ...s, step: steps.WAITING_ROOM_READY_SUBMITTED };
@@ -104,12 +121,12 @@ export const studyStore = createDerivedSocketStore(
         );
       };
     },
-    surveyTaskComplete: (pid, answers, resolve, reject) => {
+    surveyTaskComplete: (session, pid, answers, resolve, reject) => {
       return (socket, update) => {
         console.log("survey_task_complete", pid);
         socket.emit(
           "end_survey_task",
-          { participant_id: pid, answers },
+          { session, participant_id: pid, answers },
           (res) => {
             update((s) => {
               return { ...s, step: steps.SURVEY_PITH };
@@ -119,12 +136,12 @@ export const studyStore = createDerivedSocketStore(
         );
       };
     },
-    surveyPithComplete: (pid, answers, resolve, reject) => {
+    surveyPithComplete: (session, pid, answers, resolve, reject) => {
       return (socket, update) => {
         console.log("survey_pith_complete", pid);
         socket.emit(
           "end_survey_pith",
-          { participant_id: pid, answers },
+          { session, participant_id: pid, answers },
           (res) => {
             const json = JSON.parse(res);
             update((s) => {
@@ -137,28 +154,7 @@ export const studyStore = createDerivedSocketStore(
         );
       };
     },
-    /*
-    confirmReady: (resolve, reject) => {
-      return (socket, update) => {
-        socket.emit("ready_disc", {"participant_id": pid}, (res) => { resolve(); };
-      };
-    },
-    confirmStart: (resolve, reject) => {
-      return (socket, update) => {
-        socket.emit("start_disc", {"participant_id": pid}, (res) => { 
-          console.log("start_disc");
-        });
-      };
-    },
-    confirmEnd: (resolve, reject) => {
-      return (socket, update) => {
-        io.emit("end_disc", {"participant_id": pid}, (res) => { 
-          console.log("end_disc");
-        });
-      };
-    },
-    */
-    subscribeStudy: (pid) => {
+    subscribeStudy: (session, pid) => {
       return (socket, update) => {
         socket.on("admin_initiate_ready", (res) => {
           console.log("readying...");

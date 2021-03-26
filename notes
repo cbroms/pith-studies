@@ -1,13 +1,24 @@
  mongodb+srv://pith_studies_admin:<password>@cluster0.fh4fj.mongodb.net/pith_studies?retryWrites=true&w=majority
 
+.env: mongodb://root:example@mongo:27017/?authSource=admin
+docker-compose.yml
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+
 TODO:
-- iFrame with discussion link
-- save parameters better in server => have a session actually mean something
-  so could theoretically host multiple discussions at once
+- extract pid from URL instead of entering it in
 - check that no matter how user interacts with interface, is robust (i.e. the 
   if consent form checkboxes are closed/opened)
-- connect to atlas mongo with link above and change password!!!
-- some mechanism to encourage people to click the ready button on waiting
+X change Cancelled to Start
+X save parameters better in server => have a session actually mean something
+  so could theoretically host multiple discussions at once
+X iFrame with discussion link
+X connect to atlas mongo with link above and change password!!!
+X some mechanism to encourage people to click the ready button on waiting
 X make buttons bigger and stuff easier to interact with
 X having instructions or something in waiting room
 X submitting a parameter causes complete rerender of page :(

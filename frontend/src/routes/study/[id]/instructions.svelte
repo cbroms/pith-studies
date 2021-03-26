@@ -2,7 +2,7 @@
   import { studyStore } from "../../../stores/studyStore";
 
   const onContinue = async () => {
-    await studyStore.instructionsComplete($studyStore.pid);
+    await studyStore.instructionsComplete($studyStore.session, $studyStore.pid);
   };
 </script>
 

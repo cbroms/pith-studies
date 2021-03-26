@@ -4,12 +4,14 @@ import { adminSocket } from "./socket";
 // import { steps } from "../steps/steps";
 
 const defaultState = {
-  sid: "",
+  session: "",
+  valid: null,
   testType: 0,
   discLink: "",
   completionLink: "",
   startDisc: null,
   endDisc: null,
+  startList: [],
   consentList: [],
   instrList: [],
   tutorialList: [],
@@ -20,29 +22,41 @@ const defaultState = {
   surveyTaskList: [],
   surveyPithList: [],
   doneList: [], 
-  cancelList: [],
+  finish: false,
 };
 
 export const adminStore = createDerivedSocketStore(
   adminSocket,
   {
-    createStudy: (id, resolve, reject) => {
-      id = id.trim();
+    createStudy: (session, resolve, reject) => {
+      session = session.trim();
       return (socket, update) => {
         console.log("create_study", socket);
-        socket.emit("admin_study_setup", { session: id }, (res) => {
+        socket.emit("admin_study_setup", { session}, (res) => {
           // this should always work
           update((s) => {
-            return { ...s, sid: id };
+            return { ...s, session: session };
           });
           resolve();
         });
       }
     },
-    setTestType: (testType, resolve, reject) => {
+    checkSession: (session, resolve, reject) => {
+      return (socket, update) => {
+        socket.emit("admin_test_connect", {session}, (res) => {
+          const json = JSON.parse(res);
+          console.log("valid", json.valid);
+          update((s) => {
+            return { ...s, valid: json.valid };
+          });
+          resolve();
+        });
+      }
+    },
+    setTestType: (session, testType, resolve, reject) => {
       console.log("setTestType");
       return (socket, update) => {
-        socket.emit("admin_set_test_type", { test_type: testType }, 
+        socket.emit("admin_set_test_type", { session, test_type: testType }, 
           (res) => { 
             const json = JSON.parse(res);
             console.log("done", json.test_type);
@@ -54,9 +68,9 @@ export const adminStore = createDerivedSocketStore(
         );
       }
     },
-    setDiscLink: (discLink, resolve, reject) => {
+    setDiscLink: (session, discLink, resolve, reject) => {
       return (socket, update) => {
-        socket.emit("admin_set_disc_link", { disc_link: discLink }, 
+        socket.emit("admin_set_disc_link", { session, disc_link: discLink }, 
           (res) => {
             const json = JSON.parse(res);
             update((s) => {
@@ -67,23 +81,23 @@ export const adminStore = createDerivedSocketStore(
         );
       }
     },
-    setProlificLink: (prolificLink, resolve, reject) => {
+    setProlificLink: (session, prolificLink, resolve, reject) => {
       return (socket, update) => {
-        socket.emit("admin_set_prolific_link", { prolific_link: prolificLink }, 
+        socket.emit("admin_set_prolific_link", { session, prolific_link: prolificLink }, 
           (res) => { 
             const json = JSON.parse(res);
             update((s) => {
-              return { ...s, prolificLink: json.prolific_link };
+              return { ...s, completionLink: json.prolific_link };
             });
             resolve(); 
           }
         );
       }
     },
-    readyDisc: (resolve, reject) => {
+    readyDisc: (session, resolve, reject) => {
       console.log("admin_initiate_ready");
       return (socket, update) => {
-        socket.emit("admin_initiate_ready", {}, (res) => { 
+        socket.emit("admin_initiate_ready", {session}, (res) => { 
           update((s) => {
             return { 
               ...s,  
@@ -95,10 +109,10 @@ export const adminStore = createDerivedSocketStore(
         });
       }
     },
-    startDisc: (resolve, reject) => { // consider adding a handshake
+    startDisc: (session, resolve, reject) => { // consider adding a handshake
       console.log("admin_start_disc");
       return (socket, update) => {
-        socket.emit("admin_start_disc", {}, (res) => { 
+        socket.emit("admin_start_disc", {session}, (res) => { 
           const json = JSON.parse(res);
           update((s) => {
             return { 
@@ -112,10 +126,10 @@ export const adminStore = createDerivedSocketStore(
         });
       }
     },
-    endDisc: (resolve, reject) => { // consider adding a handshake
+    endDisc: (session, resolve, reject) => { // consider adding a handshake
       console.log("admin_end_disc");
       return (socket, update) => {
-        socket.emit("admin_end_disc", {}, (res) => { 
+        socket.emit("admin_end_disc", {session}, (res) => { 
           const json = JSON.parse(res);
           update((s) => {
             return { 
@@ -129,14 +143,32 @@ export const adminStore = createDerivedSocketStore(
         });
       }
     },
-    teardownStudy: (resolve, reject) => {
+    teardownStudy: (session, resolve, reject) => {
       return (socket, update) => {
-        socket.emit("admin_study_teardown", {}, (res) => { resolve(); });
+        socket.emit("admin_study_teardown", {session}, (res) => { 
+          update((s) => {
+            return { 
+              ...s,  
+              finish: true,
+            };
+          });
+          resolve(); 
+        });
       }
     },
-    subscribeProgress: () => {
+    subscribeProgress: (session) => {
       console.log("subscribe");
       return (socket, update) => {
+        socket.on("test_connect", (res) => {
+          console.log("test_connect");
+          const json = JSON.parse(res);
+          update((s) => {
+            return { 
+              ...s, 
+              startList: [...s.startList, json.participant_id]
+            };
+          });
+        });
         socket.on("join_study", (res) => {
           console.log("join_study");
           const json = JSON.parse(res);
@@ -165,7 +197,6 @@ export const adminStore = createDerivedSocketStore(
                 return { 
                   ...s, 
                   consentList: consentList,
-                  cancelList: [...s.cancelList, json.participant_id]
                 };
               }
             }
@@ -197,22 +228,6 @@ export const adminStore = createDerivedSocketStore(
             };
           });
         });
-        /*
-        socket.on("ready_disc", (res) => {
-          const json = JSON.parse(res);
-          const waitingList = [...s.waitingList].filter(
-            (e) => !json.participant_id
-          );
-          update((s) => {
-            return { 
-              ...s, 
-              waitingList: waitingList,
-              readyList: [...s.readyList, json.participant_id] // transfer 
-            };
-          });
-          resolve(); 
-        }); 
-        */
         socket.on("end_waiting", (res) => {
           const json = JSON.parse(res);
           update((s) => {
@@ -226,35 +241,6 @@ export const adminStore = createDerivedSocketStore(
             };
           });
         });
-        /*
-        socket.on("start_disc", (res) => {
-          update((s) => {
-            const json = JSON.parse(res);
-            console.log("start_disc");
-            const readySubList = [...s.readySubList].filter(
-              (e) => !json.participant_id
-            );
-            return { 
-              ...s, 
-              readySubList: readySubList,
-              discussionList: [...s.discussionList, json.participant_id] // transfer 
-            };
-          });
-        });
-        socket.on("end_disc", (res) => {
-          update((s) => {
-            const json = JSON.parse(res);
-            const discussionList = [...s.discussionList].filter(
-              (e) => !json.participant_id
-            );
-            return { 
-              ...s, 
-              discussionList: discussionList,
-              surveyTaskList: [...s.surveyTaskList, json.participant_id] // transfer 
-            };
-          });
-        });
-        */
         socket.on("end_survey_task", (res) => {
           const json = JSON.parse(res);
           update((s) => {

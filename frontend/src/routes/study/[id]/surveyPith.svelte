@@ -28,7 +28,7 @@
       response5: response11,
     };
 
-    await studyStore.surveyPithComplete($studyStore.pid, answers);
+    await studyStore.surveyPithComplete($studyStore.session, $studyStore.pid, answers);
   };
 </script>
 

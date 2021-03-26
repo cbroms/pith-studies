@@ -1,19 +1,37 @@
+<script context="module">
+  export async function preload(page, session) {
+    const { id } = page.params;
+    return { id };
+  }
+</script>
+
 <script>
   import { onMount } from "svelte";
+  import { goto } from "@sapper/app";
+
   import { studyStore } from "../../../stores/studyStore";
+
+  export let id;
 
   let pid;
   let pressed = false;
 
-  onMount(() => {
-    const url = new URL(window.location.href);
-    pid = url.searchParams.get("PROLIFIC_PID");
-    studyStore.subscribeStudy(pid);
+  onMount(async () => {
+    await studyStore.checkSession(id, pid);
+    console.log($studyStore.valid);
+    if ($studyStore.valid) {
+      const url = new URL(window.location.href);
+      pid = url.searchParams.get("PROLIFIC_PID");
+      studyStore.subscribeStudy(id, pid);
+    }
+    else {
+      goto("/404");
+    }
   });
 
   const onContinue = async () => {
     pressed = true;
-    await studyStore.joinStudy(pid);
+    await studyStore.joinStudy(id, pid);
   };
 </script>
 

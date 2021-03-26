@@ -78,6 +78,11 @@ input[type='radio']:checked {
     background: black;
 }
 
+iframe {
+  width: 100%;
+  min-height: 99vh;
+}
+
 .option {
   font-size: 20px;
   padding: 5px;

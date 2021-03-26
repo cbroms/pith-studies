@@ -7,14 +7,15 @@
 
   const onSubmit = async () => {
     await adminStore.createStudy(studyNumber);
-    adminStore.subscribeProgress();
     goto(`admin/${studyNumber}`);
   };
 </script>
 
-<h1>Create a new study</h1>
+<div class="container-outer">
+  <h1>Create a new study</h1>
 
-<label for="study">New study ID: </label>
-<input name="study" bind:value={studyNumber} />
+  <h3>New study ID: </h3>
+  <input bind:value={studyNumber} />
 
-<button on:click={onSubmit}>Create Study</button>
+  <button on:click={onSubmit}>Create Study</button>
+</div>

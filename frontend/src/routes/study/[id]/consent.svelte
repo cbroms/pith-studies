@@ -6,6 +6,7 @@
 
   const onSubmit = async () => {
     await studyStore.consentComplete(
+      $studyStore.session,
       $studyStore.pid,
       consent1,
       consent2,

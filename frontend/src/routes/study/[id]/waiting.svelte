@@ -5,7 +5,7 @@
   let clicked = false;
 
   const onReady = async () => {
-    await studyStore.readyComplete($studyStore.pid);
+    await studyStore.readyComplete($studyStore.session, $studyStore.pid);
   };
 </script>
 
@@ -80,4 +80,9 @@
 </div>
 
 <style>
+  button {
+    height: 150px;
+    width: 400px;
+    font-size: 75px;
+  }
 </style>

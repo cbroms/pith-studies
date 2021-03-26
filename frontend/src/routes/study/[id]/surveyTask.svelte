@@ -18,7 +18,7 @@
       response5: response5,
     };
 
-    await studyStore.surveyTaskComplete($studyStore.pid, answers);
+    await studyStore.surveyTaskComplete($studyStore.session, $studyStore.pid, answers);
   };
 </script>
 
