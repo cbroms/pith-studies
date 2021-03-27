@@ -45,7 +45,7 @@
     } else if ($studyStore.step === steps.DONE) {
       goto($studyStore.endRedirectURL);
     } else if ($studyStore.step === steps.CANCEL) {
-
+      goto(`/study/${id}/cancel`);
     }
   });
 </script>

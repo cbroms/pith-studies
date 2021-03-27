@@ -9,6 +9,9 @@ const defaultState = {
   testType: 0,
   discLink: "",
   completionLink: "",
+  timerStart: null,
+  timerEnd: null,
+  readyDisc: null,
   startDisc: null,
   endDisc: null,
   startList: [],
@@ -23,6 +26,7 @@ const defaultState = {
   surveyPithList: [],
   doneList: [], 
   finish: false,
+  term: false,
 };
 
 export const adminStore = createDerivedSocketStore(
@@ -98,11 +102,28 @@ export const adminStore = createDerivedSocketStore(
       console.log("admin_initiate_ready");
       return (socket, update) => {
         socket.emit("admin_initiate_ready", {session}, (res) => { 
+          const json = JSON.parse(res);
           update((s) => {
             return { 
               ...s,  
+              readyDisc: json.ready_disc,
               waitingList: [],
               readyList: [...s.waitingList],
+            }
+          });
+          resolve(); 
+        });
+      }
+    },
+    termStudy: (session, resolve, reject) => {
+      console.log("admin_term_study");
+      return (socket, update) => {
+        socket.emit("admin_term_study", {session}, (res) => { 
+          const json = JSON.parse(res);
+          update((s) => {
+            return { 
+              ...s,  
+              term: true,
             }
           });
           resolve(); 
@@ -172,11 +193,22 @@ export const adminStore = createDerivedSocketStore(
         socket.on("join_study", (res) => {
           console.log("join_study");
           const json = JSON.parse(res);
+          console.log("join_study json", json);
           update((s) => {
-            return { 
-              ...s, 
-              consentList: [...s.consentList, json.participant_id]
-            };
+            if ("timer_start" in json) {
+              return { 
+                ...s, 
+                timerStart: json.timer_start,
+                timerEnd: json.timer_start, // TODO
+                consentList: [...s.consentList, json.participant_id]
+              };
+            }
+            else {
+              return { 
+                ...s, 
+                consentList: [...s.consentList, json.participant_id]
+              };
+            }
           });
         });
         socket.on("end_consent", (res) => {

@@ -148,23 +148,26 @@
   </p>
 
   <div class="response">
-    <label>
-      <input type="checkbox" bind:checked={consent1} />
+    <div>
       <strong class="sign">I am age 18 or older.</strong>
-    </label>
+      <label class="option">Yes<input type="radio" bind:group={consent1} value={true} /></label>
+      <label class="option">No<input type="radio" bind:group={consent1} value={false} /></label>
+    </div>
 
     {#if consent1}
-      <label>
-        <input type="checkbox" bind:checked={consent2} />
+      <div>
         <strong class="sign">I have read and understand the information above.</strong>
-      </label>
+        <label class="option">Yes<input type="radio" bind:group={consent2} value={true} /></label>
+        <label class="option">No<input type="radio" bind:group={consent2} value={false} /></label>
+      </div>
     {/if}
 
     {#if consent1 && consent2}
-      <label>
-        <input type="checkbox" bind:checked={consent3} />
+      <div>
         <strong class="sign">I want to participate in this research and continue with the task and survey.</strong>
-      </label>
+        <label class="option">Yes<input type="radio" bind:group={consent3} value={true} /></label>
+        <label class="option">No<input type="radio" bind:group={consent3} value={false} /></label>
+      </div>
     {/if}
 
     <div class="submission">
@@ -177,6 +180,9 @@
 </div>
 
 <style>
+  input[type='radio'] {
+    border-radius: 0%;
+  }
   .response {
     margin: 20px 0 20px 0;
   }
@@ -184,6 +190,7 @@
     margin: 200px;
   }
   .sign {
+    margin-right: 20px;
     font-size: 21px;
   }
   .submission {

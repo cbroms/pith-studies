@@ -12,7 +12,7 @@
   <ol>
     <li>
       We request you perform the session on a laptop and use either the Firefox or
-      Chrome browser.
+      Chrome browser. Please do not use the back button during the course of this session.
     </li>
     <li>
       Please read these instructions carefully. Once you are done, click the

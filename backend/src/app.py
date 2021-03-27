@@ -108,17 +108,32 @@ class AdminNamespace(AsyncNamespace):
     async def on_admin_initiate_ready(self, sid, request):
       session = request["session"]
       logger.info("admin_initiate_ready({})".format(session))
+      ready_disc = get_time()
+      params.update_one({"session": session}, {"$set": {"ready_disc": ready_disc}})
       result = {}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "admin_initiate_ready", result, namespace=STUDY_NS, room=TESTER_ROOM
       )
-      return {}
+      result = {"ready_disc": ready_disc}
+      result = dumps(result, cls=JSONEncoder)
+      return result
+
+    async def on_admin_term_study(self, sid, request):
+      session = request["session"]
+      logger.info("admin_term_study({})".format(session))
+      result = {}
+      result = dumps(result, cls=JSONEncoder)
+      params.update_one({"session": session}, {"$set": {"term": True}})
+      await self.emit(
+        "admin_term_study", result, namespace=STUDY_NS, room=TESTER_ROOM
+      )
 
     async def on_admin_start_disc(self, sid, request):
       session = request["session"]
       logger.info("admin_start_disc({})".format(session))
       start_disc = get_time()
+      params.update_one({"session": session}, {"$set": {"start_disc": start_disc}})
       sess_params = params.find_one({"session": session})
       result = {"disc_link": sess_params["disc_link"]}
       result = dumps(result, cls=JSONEncoder)
@@ -133,6 +148,7 @@ class AdminNamespace(AsyncNamespace):
       session = request["session"]
       logger.info("admin_end_disc({})".format(session))
       end_disc = get_time()
+      params.update_one({"session": session}, {"$set": {"end_disc": end_disc}})
       result = {}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
@@ -145,6 +161,7 @@ class AdminNamespace(AsyncNamespace):
     async def on_admin_study_teardown(self, sid, request):
       session = request["session"]
       logger.info("admin_study_teardown({})".format(session))
+      params.update_one({"session": session}, {"$set": {"finish": True}})
       self.close_room(TESTER_ROOM, namespace=STUDY_NS)
       self.leave_room(sid, ADMIN_ROOM)
       return {}
@@ -177,13 +194,34 @@ class StudyNamespace(AsyncNamespace):
       session = request["session"]
       participant_id = request["participant_id"]
       logger.info("join_study({}, {})".format(session, participant_id))
-      result = {"participant_id": participant_id}
-      result = dumps(result, cls=JSONEncoder)
-      await self.emit(
-        "join_study", result, namespace=ADMIN_NS, room=ADMIN_ROOM
-      )
       self.enter_room(sid, TESTER_ROOM)
-      return {}
+
+      sess_params = params.find_one({"session": session})
+      if not "timer_start" in sess_params:
+        timer_start = get_time()
+        params.update_one({"session": session}, {"$set": {"timer_start": timer_start}})
+        # send admin timer
+        result = {
+          "participant_id": participant_id,
+          "timer_start": timer_start
+        }
+        result = dumps(result, cls=JSONEncoder)
+        await self.emit(
+          "join_study", result, namespace=ADMIN_NS, room=ADMIN_ROOM
+        )
+        # update
+        sess_params = params.find_one({"session": session})
+      else:
+        # don't send admin timer
+        result = {"participant_id": participant_id}
+        result = dumps(result, cls=JSONEncoder)
+        await self.emit(
+          "join_study", result, namespace=ADMIN_NS, room=ADMIN_ROOM
+        )
+
+      result = {"timer_start": sess_params["timer_start"]}
+      result = dumps(result, cls=JSONEncoder)
+      return result
 
     async def on_end_consent(self, sid, request):
       session = request["session"]
@@ -195,14 +233,15 @@ class StudyNamespace(AsyncNamespace):
         session, participant_id, response1, response2, response3
       ))
       accepted = response1 and response2 and response3
-      consent.insert_one({
-        "session": session,
-        "participant_id": participant_id,
-        "response1": response1,
-        "response2": response2,
-        "response3": response3,
-        "accepted": accepted
-      })
+      if accepted:
+        consent.insert_one({
+          "session": session,
+          "participant_id": participant_id,
+          "response1": response1,
+          "response2": response2,
+          "response3": response3,
+          "accepted": accepted
+        })
       result = {"participant_id": participant_id, "accepted": accepted}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(

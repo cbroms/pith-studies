@@ -16,7 +16,7 @@
   {/if}
 
   {#if $studyStore.step === steps.WAITING_ROOM_READY}
-    <h1>Press ready to start</h1>
+    <h1>Press ready to start (you have one minute to click)</h1>
     <button on:click={onReady}>Ready</button>
   {/if}
 
@@ -26,24 +26,12 @@
 
   <hr size="5" noshade>
 
-  <h2>Instructions</h2>
+  <h2>Keep in Mind...</h2>
 
   <ol>
     <li>
       We request you perform the session on a laptop and use either the Firefox or
-      Chrome browser.
-    </li>
-    <li>
-      Please read these instructions carefully. Once you are done, click the
-      "Continue" button.
-    </li>
-    <li>On the next page, you will follow a tutorial to use the platform.</li>
-    <li>
-      Once you are done with the tutorial, you will be redirected to the waiting
-      room. The "Start" button will appear within 15 minutes. <strong
-        >Please do not leave the waiting room during this time.</strong
-      > Once the button appears, please click on it to join the discussion. You will
-      be given a minute to click on the button.
+      Chrome browser. Please do not use the back button during the course of this session. 
     </li>
     <li>
       When you join the Pith discussion, please input a nickname. <strong

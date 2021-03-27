@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 import { createDerivedSocketStore } from "./createDerivedSocketStore";
 import { studySocket } from "./socket";
 
@@ -11,6 +13,8 @@ const defaultState = {
   endRedirectURL: "",
   discussionURL: "",
   testType: null, // gives tutorial
+  timerStart: null, // gives when timer started
+  timerEnd: null, // gives when timer should end
 };
 
 export const studyStore = createDerivedSocketStore(
@@ -34,9 +38,16 @@ export const studyStore = createDerivedSocketStore(
       return (socket, update) => {
         console.log("join_study");
         socket.emit("join_study", { session, participant_id: pid }, (res) => {
-          // this should always work
+          const json = JSON.parse(res);
           update((s) => {
-            return { ...s, session: session, step: steps.CONSENT, pid: pid };
+            return { 
+              ...s, 
+              session: session, 
+              pid: pid,
+              step: steps.CONSENT,
+              timerStart: json.start_timer,
+              timerEnd: json.start_timer, // TODO
+            };
           });
         });
       };
@@ -67,7 +78,7 @@ export const studyStore = createDerivedSocketStore(
             }
             else {
               update((s) => {
-                return { ...s, step: steps.CANCEL };
+                return { ...s }; // stay on same page
               });
             }
             resolve();
@@ -160,6 +171,12 @@ export const studyStore = createDerivedSocketStore(
           console.log("readying...");
           update((s) => {
             return { ...s, step: steps.WAITING_ROOM_READY };
+          });
+        });
+        socket.on("admin_term_study", (res) => {
+          console.log("terminating...");
+          update((s) => {
+            return { ...s, step: steps.CANCEL };
           });
         });
         socket.on("admin_start_disc", (res) => {

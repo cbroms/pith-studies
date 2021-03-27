@@ -47,6 +47,9 @@
   const onEndDisc = async () => {
     await adminStore.endDisc(id);
   }
+  const onTermStudy = async () => {
+    await adminStore.termStudy(id);
+  }
   const onFinishStudy = async () => {
     await adminStore.teardownStudy(id);
   }
@@ -54,7 +57,7 @@
 </script>
 
 <div class="admin-panel">
-  {#if $adminStore.finish}
+  {#if $adminStore.finish || $adminStore.term}
     <h1 style="text-decoration: line-through;">Admin: <em>{id}</em></h1>
   {:else}
     <h1>Admin: <em>{id}</em></h1>
@@ -75,9 +78,6 @@
           <h5>Pith Discussion Link (Discussion): <a href={$adminStore.discLink}>{$adminStore.discLink}</a></h5>
           <input bind:value={discLink} />
           <button on:click={onDiscLink}>Submit</button>
-        </div>
-
-        <div class="param">
           <h5>Completion Link (Complete): <a href={$adminStore.completionLink}>{$adminStore.completionLink}</a></h5>
           <input bind:value={completionLink} />
           <button on:click={onCompletionLink}>Submit</button>
@@ -87,11 +87,30 @@
       <div class="disc_settings">
         <div class="disc_buttons">
           <button class="disc_button" on:click={onReadyDisc}>Ready</button>
+        </div>
+        <div class="disc_buttons">
           <button class="disc_button" on:click={onStartDisc}>Start</button>
           <button class="disc_button" on:click={onEndDisc}>End</button>
         </div>
-
+        <div class="disc_buttons">
+          <button class="disc_button" on:click={onTermStudy}>Term.</button>
+          <button class="disc_button" on:click={onFinishStudy}>Finish</button>
+        </div>
+      </div>
+      <div class="disc_settings">
         <div>
+          {#if $adminStore.timerStart}
+            <h5>Timer Start: {parseTime($adminStore.timerStart)}</h5>
+            <h5>Timer End: {parseTime($adminStore.timerEnd)}</h5>
+          {:else}
+            <h5>Timer Start: ---</h5>
+            <h5>Timer End: ---</h5>
+          {/if}
+          {#if $adminStore.readyDisc}
+            <h5>Ready Time: {parseTime($adminStore.readyDisc)}</h5>
+          {:else}
+            <h5>Ready Time: ---</h5>
+          {/if}
           {#if $adminStore.startDisc}
             <h5>Start Time: {parseTime($adminStore.startDisc)}</h5>
           {:else}
@@ -104,11 +123,6 @@
           {/if}
         </div>
       </div>
-
-      <div class="finish_settings">
-        <button on:click={onFinishStudy}>Finish Study</button>
-      </div>
-
     </div>
 
     <div class="panel">
@@ -235,7 +249,6 @@
     margin: 100px auto;
     max-width: 1200px;
     width: 100%;
-    border-collapse: collapse;
   }
   .panel {
     display: flex;
@@ -256,10 +269,6 @@
   }
   .disc_settings {
     padding: 5px;
-  }
-  .finish_settings {
-    display: flex;
-    padding: 10px;
   }
   .param {
     padding: 10px;
@@ -286,7 +295,8 @@
   }
   .disc_button {
     margin-right: 10px;
-    width: 75px;
+    width: 80px;
+    height: 40px;
   }
   button {
     margin-top: 10px;

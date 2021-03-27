@@ -10,9 +10,20 @@ docker-compose.yml
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
 
 TODO:
+  Also give them to Carley and have her sign new form (?).
+
+- Give some way to make sure that if discussion is started, waiting cannot
+  click button.
+- Update with new documents.
+
 - extract pid from URL instead of entering it in
 - check that no matter how user interacts with interface, is robust (i.e. the 
   if consent form checkboxes are closed/opened)
+
+X Consent form, have yes/no square radio options. Only if they reply yes
+  can they go to next question.
+X Only if fully consent can we save their data (double-check this in server
+  under consent).
 X change Cancelled to Start
 X save parameters better in server => have a session actually mean something
   so could theoretically host multiple discussions at once
