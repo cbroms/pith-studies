@@ -13,8 +13,9 @@ const defaultState = {
   endRedirectURL: "",
   discussionURL: "",
   testType: null, // gives tutorial
-  timerStart: null, // gives when timer started
-  timerEnd: null, // gives when timer should end
+  timerEnd: null, // timer 
+  readyEnd: null, // timer
+  discEnd: null, // timer
 };
 
 export const studyStore = createDerivedSocketStore(
@@ -45,10 +46,10 @@ export const studyStore = createDerivedSocketStore(
               session: session, 
               pid: pid,
               step: steps.CONSENT,
-              timerStart: json.start_timer,
-              timerEnd: json.start_timer, // TODO
+              timerEnd: json.timer_end,
             };
           });
+          resolve();
         });
       };
     },
@@ -169,14 +170,30 @@ export const studyStore = createDerivedSocketStore(
       return (socket, update) => {
         socket.on("admin_initiate_ready", (res) => {
           console.log("readying...");
-          update((s) => {
-            return { ...s, step: steps.WAITING_ROOM_READY };
-          });
+            update((s) => {
+              const step = s.step;
+              if (step === steps.WAITING_ROOM) {
+                const json = JSON.parse(res);
+                return { 
+                  ...s, 
+                  step: steps.WAITING_ROOM_READY,
+                  readyEnd: json.ready_end 
+                };
+              }
+              else {
+                return { ...s };
+              }
+            });
         });
         socket.on("admin_term_study", (res) => {
           console.log("terminating...");
+          const json = JSON.parse(res);
           update((s) => {
-            return { ...s, step: steps.CANCEL };
+            return { 
+              ...s, 
+              step: steps.CANCEL,
+              endRedirectURL: json.prolific_link
+            };
           });
         });
         socket.on("admin_start_disc", (res) => {
@@ -186,7 +203,10 @@ export const studyStore = createDerivedSocketStore(
             const step = s.step;
             if (step === steps.WAITING_ROOM_READY_SUBMITTED) {
               return { 
-                ...s, step: steps.DISCUSSION, discussionURL: json.disc_link 
+                ...s, 
+                step: steps.DISCUSSION, 
+                discussionURL: json.disc_link,
+                discEnd: json.disc_end
               };
             }
             else { // no change

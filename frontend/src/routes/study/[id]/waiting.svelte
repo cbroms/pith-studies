@@ -24,8 +24,6 @@
     <h1>Waiting for others to continue...</h1>
   {/if}
 
-  <hr size="5" noshade>
-
   <h2>Keep in Mind...</h2>
 
   <ol>

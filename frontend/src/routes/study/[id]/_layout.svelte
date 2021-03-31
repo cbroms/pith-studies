@@ -13,10 +13,14 @@
   import { afterUpdate, onMount } from "svelte";
   import { studyStore } from "../../../stores/studyStore";
   import { steps } from "../../../steps/steps";
+  import { timerStore } from "../../../stores/timerStore";
+  import Timer from "../../../components/Timer.svelte";
 
   import { studySocket as socket } from "../../../stores/socket.js";
   const { session } = stores();
   const { CONNECTION } = $session;
+
+  let stage = 0;
 
   // initialize study socket
   onMount(async () => {
@@ -24,6 +28,20 @@
   });
 
   afterUpdate(() => { 
+
+    if ($studyStore.step == steps.CONSENT && stage === 0) {
+      timerStore.initialize($studyStore.timerEnd);
+      stage += 1;
+    } 
+    else if ($studyStore.step === steps.WAITING_ROOM_READY && stage === 1) {
+      timerStore.initialize($studyStore.readyEnd);
+      stage += 1;
+    }
+    else if ($studyStore.step == steps.DISCUSSION && stage === 2) {
+      timerStore.initialize($studyStore.discEnd);
+      stage += 1;
+    }
+
     if ($studyStore.step === steps.CONSENT) {
       goto(`/study/${id}/consent`);
     } else if ($studyStore.step === steps.INSTRUCTIONS) {
@@ -51,5 +69,6 @@
 </script>
 
 <main>
+  <Timer />
   <slot />
 </main>

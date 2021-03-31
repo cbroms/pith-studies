@@ -12,14 +12,22 @@ docker-compose.yml
 TODO:
   Also give them to Carley and have her sign new form (?).
 
-- Give some way to make sure that if discussion is started, waiting cannot
-  click button.
+- extract pid from URL instead of entering it in
+  Through URL participant_ID, should be able to LOAD the proper stage from server.
+  admin LOAD
+- Once cancelled, any time user clicks button to server should not change db.
 - Update with new documents.
 
-- extract pid from URL instead of entering it in
 - check that no matter how user interacts with interface, is robust (i.e. the 
   if consent form checkboxes are closed/opened)
 
+X On admin side, use a map instead series of lists. Then updating state via
+  studyStore is idempotent. In addition, we save participant state on server
+  so upon load, can get any available data. We also load the parameters and
+  whatever times are available.
+X Make sure that once someone clicks a button, does not make dups on admin side.
+  => suggested: we should disable the button after they click it once
+X Competing timers once ready. Why is this happening? Maybe initialize or interval?
 X Consent form, have yes/no square radio options. Only if they reply yes
   can they go to next question.
 X Only if fully consent can we save their data (double-check this in server

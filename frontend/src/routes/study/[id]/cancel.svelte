@@ -4,6 +4,7 @@
   import { studyStore } from "../../../stores/studyStore";
 
   const onRedirect = async () => {
+    console.log($studyStore.endRedirectURL);
     goto($studyStore.endRedirectURL);
   };
 </script>

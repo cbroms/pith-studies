@@ -1,5 +1,6 @@
 import { createDerivedSocketStore } from "./createDerivedSocketStore";
 import { adminSocket } from "./socket";
+import { steps } from "../steps/steps";
 
 // import { steps } from "../steps/steps";
 
@@ -10,21 +11,14 @@ const defaultState = {
   discLink: "",
   completionLink: "",
   timerStart: null,
-  timerEnd: null,
-  readyDisc: null,
-  startDisc: null,
-  endDisc: null,
-  startList: [],
-  consentList: [],
-  instrList: [],
-  tutorialList: [],
-  waitingList: [],
-  readyList: [],
-  readySubList: [],
-  discussionList: [],
-  surveyTaskList: [],
-  surveyPithList: [],
-  doneList: [], 
+  timerEnd: null, // timer
+  readyStart: null,
+  readyEnd: null, // timer
+  discStart: null,
+  discEnd: null, // timer
+  trueEndDisc: null,
+  participants: {},
+  participantList: [],
   finish: false,
   term: false,
 };
@@ -104,11 +98,17 @@ export const adminStore = createDerivedSocketStore(
         socket.emit("admin_initiate_ready", {session}, (res) => { 
           const json = JSON.parse(res);
           update((s) => {
+            let participants = {...s.participants};
+            for (const pid in participants) {
+              if (participants[pid] === steps.WAITING_ROOM) {
+                participants[pid] = steps.WAITING_ROOM_READY;
+              }
+            }
             return { 
               ...s,  
-              readyDisc: json.ready_disc,
-              waitingList: [],
-              readyList: [...s.waitingList],
+              readyStart: json.ready_start,
+              readyEnd: json.ready_end,
+              participants: participants,
             }
           });
           resolve(); 
@@ -119,7 +119,6 @@ export const adminStore = createDerivedSocketStore(
       console.log("admin_term_study");
       return (socket, update) => {
         socket.emit("admin_term_study", {session}, (res) => { 
-          const json = JSON.parse(res);
           update((s) => {
             return { 
               ...s,  
@@ -136,11 +135,17 @@ export const adminStore = createDerivedSocketStore(
         socket.emit("admin_start_disc", {session}, (res) => { 
           const json = JSON.parse(res);
           update((s) => {
+            let participants = {...s.participants};
+            for (const pid in participants) {
+              if (participants[pid] === steps.WAITING_ROOM_READY_SUBMITTED) {
+                participants[pid] = steps.DISCUSSION;
+              }
+            }
             return { 
               ...s,  
-              startDisc: json.start_disc,
-              readySubList: [],
-              discussionList: [...s.readySubList],
+              discStart: json.disc_start,
+              discEnd: json.disc_end,
+              participants: participants,
             };
           });
           resolve(); 
@@ -153,11 +158,16 @@ export const adminStore = createDerivedSocketStore(
         socket.emit("admin_end_disc", {session}, (res) => { 
           const json = JSON.parse(res);
           update((s) => {
+            let participants = {...s.participants};
+            for (const pid in participants) {
+              if (participants[pid] === steps.DISCUSSION) {
+                participants[pid] = steps.SURVEY_TASK;
+              }
+            }
             return { 
               ...s,  
-              endDisc: json.end_disc,
-              discussionList: [],
-              surveyTaskList: [...s.discussionList],
+              trueDiscEnd: json.true_disc_end,
+              participants: participants,
             };
           });
           resolve(); 
@@ -186,27 +196,29 @@ export const adminStore = createDerivedSocketStore(
           update((s) => {
             return { 
               ...s, 
-              startList: [...s.startList, json.participant_id]
             };
           });
         });
         socket.on("join_study", (res) => {
-          console.log("join_study");
           const json = JSON.parse(res);
-          console.log("join_study json", json);
           update((s) => {
+              console.log("join_study", json);
             if ("timer_start" in json) {
+              const participantList = [...s.participantList, json.participant_id];
+              const participants = {...s.participants, [json.participant_id]: steps.CONSENT};
+              console.log("participants", participantList, participants);
               return { 
                 ...s, 
                 timerStart: json.timer_start,
-                timerEnd: json.timer_start, // TODO
-                consentList: [...s.consentList, json.participant_id]
+                timerEnd: json.timer_end,
+                participantList: participantList,
+                participants: participants,
               };
             }
             else {
               return { 
                 ...s, 
-                consentList: [...s.consentList, json.participant_id]
+                participants: {...s.participants, [json.participant_id]: steps.CONSENT},
               };
             }
           });
@@ -215,20 +227,15 @@ export const adminStore = createDerivedSocketStore(
           console.log("end_consent");
           const json = JSON.parse(res);
             update((s) => {
-              const consentList = [...s.consentList].filter(
-                (e) => !json.participant_id
-              );
               if (json.accepted) {
                 return { 
                   ...s, 
-                  consentList: consentList,
-                  instrList: [...s.instrList, json.participant_id]
+                  participants: {...s.participants, [json.participant_id]: steps.INSTRUCTIONS},
                 };
               }
               else {
                 return { 
                   ...s, 
-                  consentList: consentList,
                 };
               }
             }
@@ -237,65 +244,45 @@ export const adminStore = createDerivedSocketStore(
         socket.on("end_instr", (res) => {
           const json = JSON.parse(res);
           update((s) => {
-            const instrList = [...s.instrList].filter(
-              (e) => !json.participant_id
-            );
             return { 
               ...s, 
-              instrList: instrList,
-              tutorialList: [...s.tutorialList, json.participant_id]
+              participants: {...s.participants, [json.participant_id]: steps.TUTORIAL},
             };
           });
         });
         socket.on("end_tutorial", (res) => {
           const json = JSON.parse(res);
           update((s) => {
-            const tutorialList = [...s.tutorialList].filter(
-              (e) => !json.participant_id
-            );
             return { 
               ...s, 
-              tutorialList: tutorialList,
-              waitingList: [...s.waitingList, json.participant_id]
+              participants: {...s.participants, [json.participant_id]: steps.WAITING_ROOM},
             };
           });
         });
         socket.on("end_waiting", (res) => {
           const json = JSON.parse(res);
           update((s) => {
-            const readyList = [...s.readyList].filter(
-              (e) => !json.participant_id
-            );
             return { 
               ...s, 
-              readyList: readyList,
-              readySubList: [...s.readySubList, json.participant_id]
+              participants: {...s.participants, [json.participant_id]: steps.WAITING_ROOM_READY_SUBMITTED},
             };
           });
         });
         socket.on("end_survey_task", (res) => {
           const json = JSON.parse(res);
           update((s) => {
-            const surveyTaskList = [...s.surveyTaskList].filter(
-              (e) => !json.participant_id
-            );
             return { 
               ...s, 
-              surveyTaskList: surveyTaskList,
-              surveyPithList: [...s.surveyPithList, json.participant_id]
+              participants: {...s.participants, [json.participant_id]: steps.SURVEY_PITH},
             };
           });
         });
         socket.on("end_survey_pith", (res) => {
           const json = JSON.parse(res);
           update((s) => {
-            const surveyPithList = [...s.surveyPithList].filter(
-              (e) => !json.participant_id
-            );
             return { 
               ...s, 
-              surveyPithList: surveyPithList,
-              doneList: [...s.doneList, json.participant_id]
+              participants: {...s.participants, [json.participant_id]: steps.DONE},
             };
           });
         });

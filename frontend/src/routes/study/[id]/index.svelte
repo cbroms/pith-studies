@@ -10,6 +10,7 @@
   import { goto } from "@sapper/app";
 
   import { studyStore } from "../../../stores/studyStore";
+  import { timerStore } from "../../../stores/timerStore";
 
   export let id;
 
@@ -32,6 +33,7 @@
   const onContinue = async () => {
     pressed = true;
     await studyStore.joinStudy(id, pid);
+    console.log("studyStore", $studyStore);
   };
 </script>
 

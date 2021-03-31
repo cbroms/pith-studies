@@ -6,12 +6,15 @@
 </script>
 
 <script>
-  import { onMount } from "svelte";
+  import { onMount, afterUpdate } from "svelte";
   import { goto } from "@sapper/app";
 
   import { parseTime } from "../../utils/parseTime";
 
   import { adminStore } from "../../stores/adminStore";
+  import { timerStore } from "../../stores/timerStore";
+
+  import { steps } from "../../steps/steps";
 
   export let id;
 
@@ -27,6 +30,14 @@
     else {
       goto("/404");
     }
+  });
+
+  afterUpdate(() => {
+    /*
+    if ($adminStore.timerEnd && $timerStore === null) {
+      timerStore.initialize($adminStore.timerEnd);
+    } 
+    */
   });
 
   const onDiscLink = async () => {
@@ -101,25 +112,38 @@
         <div>
           {#if $adminStore.timerStart}
             <h5>Timer Start: {parseTime($adminStore.timerStart)}</h5>
-            <h5>Timer End: {parseTime($adminStore.timerEnd)}</h5>
           {:else}
             <h5>Timer Start: ---</h5>
+          {/if}
+          {#if $adminStore.timerEnd}
+            <h5>Timer End: {parseTime($adminStore.timerEnd)}</h5>
+          {:else}
             <h5>Timer End: ---</h5>
           {/if}
-          {#if $adminStore.readyDisc}
-            <h5>Ready Time: {parseTime($adminStore.readyDisc)}</h5>
+          {#if $adminStore.readyStart}
+            <h5>Ready Start: {parseTime($adminStore.readyStart)}</h5>
           {:else}
-            <h5>Ready Time: ---</h5>
+            <h5>Ready Start: ---</h5>
           {/if}
-          {#if $adminStore.startDisc}
-            <h5>Start Time: {parseTime($adminStore.startDisc)}</h5>
+          {#if $adminStore.readyEnd}
+            <h5>Ready End: {parseTime($adminStore.readyEnd)}</h5>
           {:else}
-            <h5>Start Time: ---</h5>
+            <h5>Ready End: ---</h5>
           {/if}
-          {#if $adminStore.endDisc}
-            <h5>End Time: {parseTime($adminStore.endDisc)}</h5>
+          {#if $adminStore.discStart}
+            <h5>Disc Start: {parseTime($adminStore.discStart)}</h5>
           {:else}
-            <h5>End Time: ---</h5>
+            <h5>Disc Start: ---</h5>
+          {/if}
+          {#if $adminStore.discEnd}
+            <h5>Disc End: {parseTime($adminStore.discEnd)}</h5>
+          {:else}
+            <h5>Disc End: ---</h5>
+          {/if}
+          {#if $adminStore.trueDiscEnd}
+            <h5>True Disc End: {parseTime($adminStore.trueDiscEnd)}</h5>
+          {:else}
+            <h5>True Disc End: ---</h5>
           {/if}
         </div>
       </div>
@@ -131,8 +155,10 @@
           <div class="column-inner">
             <h5>Start</h5>
             <ul>
-                {#each $adminStore.startList as pid (pid)}
-                  <li>{pid}</li>
+                {#each $adminStore.participantList as pid (pid)}
+                  {#if $adminStore.participants.pid === steps.WELCOME}
+                    <li>{pid}</li>
+                  {/if}
                 {/each}
             </ul>
           </div>
@@ -141,8 +167,10 @@
           <div class="column-inner">
             <h5>Consent</h5>
             <ul>
-                {#each $adminStore.consentList as pid (pid)}
-                  <li>{pid}</li>
+                {#each $adminStore.participantList as pid (pid)}
+                  {#if $adminStore.participants[pid] === steps.CONSENT}
+                    <li>{pid}</li>
+                  {/if}
                 {/each}
             </ul>
           </div>
@@ -151,8 +179,10 @@
           <div class="column-inner">
             <h5>Instructions</h5>
             <ul>
-                {#each $adminStore.instrList as pid (pid)}
-                  <li>{pid}</li>
+                {#each $adminStore.participantList as pid (pid)}
+                  {#if $adminStore.participants[pid] === steps.INSTRUCTIONS}
+                    <li>{pid}</li>
+                  {/if}
                 {/each}
             </ul>
           </div>
@@ -161,8 +191,10 @@
           <div class="column-inner">
             <h5>Tutorial</h5>
             <ul>
-                {#each $adminStore.tutorialList as pid (pid)}
-                  <li>{pid}</li>
+                {#each $adminStore.participantList as pid (pid)}
+                  {#if $adminStore.participants[pid] === steps.TUTORIAL}
+                    <li>{pid}</li>
+                  {/if}
                 {/each}
             </ul>
           </div>
@@ -171,8 +203,10 @@
           <div class="column-inner">
             <h5>Waiting</h5>
             <ul>
-                {#each $adminStore.waitingList as pid (pid)}
-                  <li>{pid}</li>
+                {#each $adminStore.participantList as pid (pid)}
+                  {#if $adminStore.participants[pid] === steps.WAITING_ROOM}
+                    <li>{pid}</li>
+                  {/if}
                 {/each}
             </ul>
           </div>
@@ -181,8 +215,10 @@
           <div class="column-inner">
             <h5>Ready Out</h5>
             <ul>
-                {#each $adminStore.readyList as pid (pid)}
-                  <li>{pid}</li>
+                {#each $adminStore.participantList as pid (pid)}
+                  {#if $adminStore.participants[pid] === steps.WAITING_ROOM_READY}
+                    <li>{pid}</li>
+                  {/if}
                 {/each}
             </ul>
           </div>
@@ -191,8 +227,10 @@
           <div class="column-inner">
             <h5>Ready In</h5>
             <ul>
-                {#each $adminStore.readySubList as pid (pid)}
-                  <li>{pid}</li>
+                {#each $adminStore.participantList as pid (pid)}
+                  {#if $adminStore.participants[pid] === steps.WAITING_ROOM_READY_SUBMITTED}
+                    <li>{pid}</li>
+                  {/if}
                 {/each}
             </ul>
           </div>
@@ -201,8 +239,10 @@
           <div class="column-inner">
             <h5>Discussion</h5>
             <ul>
-                {#each $adminStore.discussionList as pid (pid)}
-                  <li>{pid}</li>
+                {#each $adminStore.participantList as pid (pid)}
+                  {#if $adminStore.participants[pid] === steps.DISCUSSION}
+                    <li>{pid}</li>
+                  {/if}
                 {/each}
             </ul>
           </div>
@@ -211,8 +251,10 @@
           <div class="column-inner">
             <h5>Survey: Task</h5>
             <ul>
-                {#each $adminStore.surveyTaskList as pid (pid)}
-                  <li>{pid}</li>
+                {#each $adminStore.participantList as pid (pid)}
+                  {#if $adminStore.participants[pid] === steps.SURVEY_TASK}
+                    <li>{pid}</li>
+                  {/if}
                 {/each}
             </ul>
           </div>
@@ -221,8 +263,10 @@
           <div class="column-inner">
             <h5>Survey: Pith</h5>
             <ul>
-                {#each $adminStore.surveyPithList as pid (pid)}
-                  <li>{pid}</li>
+                {#each $adminStore.participantList as pid (pid)}
+                  {#if $adminStore.participants[pid] === steps.SURVEY_PITH}
+                    <li>{pid}</li>
+                  {/if}
                 {/each}
             </ul>
           </div>
@@ -231,8 +275,10 @@
           <div class="column-inner">
             <h5>Complete</h5>
             <ul>
-                {#each $adminStore.doneList as pid (pid)}
-                  <li>{pid}</li>
+                {#each $adminStore.participantList as pid (pid)}
+                  {#if $adminStore.participants[pid] === steps.DONE}
+                    <li>{pid}</li>
+                  {/if}
                 {/each}
             </ul>
           </div>
