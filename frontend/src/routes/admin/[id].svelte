@@ -20,6 +20,7 @@
 
   let discLink = null;
   let completionLink = null;
+  let cancelLink = null;
   let testType = null;
 
   onMount(async () => {
@@ -45,6 +46,9 @@
   };
   const onCompletionLink = async () => {
     await adminStore.setProlificLink(id, completionLink);
+  };
+  const onCancelLink = async () => {
+    await adminStore.setCancelLink(id, cancelLink);
   };
   const onTestType = async () => {
     await adminStore.setTestType(id, testType);
@@ -86,12 +90,15 @@
         </div>
 
         <div class="param">
-          <h5>Pith Discussion Link (Discussion): <a href={$adminStore.discLink}>{$adminStore.discLink}</a></h5>
+          <h5>Pith Discussion Link (Discussion): <a href={$adminStore.discLink}>{$adminStore.discLink === null}</a></h5>
           <input bind:value={discLink} />
           <button on:click={onDiscLink}>Submit</button>
-          <h5>Completion Link (Complete): <a href={$adminStore.completionLink}>{$adminStore.completionLink}</a></h5>
+          <h5>Completion Link (Complete): <a href={$adminStore.completionLink}>{$adminStore.completionLink === null}</a></h5>
           <input bind:value={completionLink} />
           <button on:click={onCompletionLink}>Submit</button>
+          <h5>Cancel Link (Cancel, Discussion): <a href={$adminStore.cancelLink}>{$adminStore.cancelLink === null}</a></h5>
+          <input bind:value={cancelLink} />
+          <button on:click={onCancelLink}>Submit</button>
         </div>
       </div>
 

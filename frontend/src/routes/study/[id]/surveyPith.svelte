@@ -20,12 +20,12 @@
       response3: response3,
       response4: response4,
       response5: response5,
-      response5: response6,
-      response5: response7,
-      response5: response8,
-      response5: response9,
-      response5: response10,
-      response5: response11,
+      response6: response6,
+      response7: response7,
+      response8: response8,
+      response9: response9,
+      response10: response10,
+      response11: response11,
     };
 
     await studyStore.surveyPithComplete($studyStore.session, $studyStore.pid, answers);
@@ -35,28 +35,30 @@
 <div class="container-outer">
   <h1>Survey: Discussion Platform</h1>
 
-  <em>Short-answer</em>
+  <p><em>You will only be able to continue once you have answered all the required questions.</em></p>
+
+  <p><em>Short-answer</em></p>
   <ol>
     <li>
-      Please describe what you liked about the platform.
+      <em>(required)</em> Please describe what you liked about the platform. If there is nothing you like about the platform, answer 'N/A'. 
       <div class="answer">
         <textarea bind:value={response1} />
       </div>
     </li>
     <li>
-      Please describe what you disliked about the platform.
+      <em>(required)</em> Please describe what you disliked about the platform. If there is nothing you dislike about the platform, answer 'N/A'. 
       <div class="answer">
         <textarea bind:value={response2} />
       </div>
     </li>
     <li>
-      Were there any features you felt were especially useful and why?
+      <em>(required)</em> Were there any features you felt were especially useful and why? If there are no features you felt were especially useful, answer 'N/A'.
       <div class="answer">
         <textarea bind:value={response3} />
       </div>
     </li>
     <li>
-      Were there any features in the interface that were confusing and why?
+      <em>(required)</em> Were there any features in the interface that were confusing and why? If there are no features you felt were confusing, answer 'N/A'.
       <div class="answer">
         <textarea bind:value={response4} />
       </div>
@@ -70,10 +72,10 @@
     </li>
   </ol>
 
-  <em>Multiple Choice (1 is low, 10 is high)</em>
+  <p><em>Multiple Choice (1 is low, 10 is high)</em></p>
   <ol>
     <li>
-      How easy is it to use Pith (scale of 1-10)?
+      <em>(required)</em> How easy is it to use Pith (scale of 1-10)?
       <div class="answer">
         <label class="option">1<input type="radio" bind:group={response6} value={1} /></label>
         <label class="option">2<input type="radio" bind:group={response6} value={2} /></label>
@@ -89,45 +91,46 @@
     </li>
   </ol>
 
-  <em>
+  <p><em>
     Please note down any other observations you would like to share.
-  </em>
+  </em></p>
   <div class="answer">
     <textarea bind:value={response7} />
   </div>
 
   <h1>Survey: Pilot</h1>
 
-  <em>Short-answer</em>
+  <p><em>Short-answer</em></p>
   <ol>
     <li>
-      Did you use an external aid, such as a notepad, to complete the answers to
-      this survey? Note that answering "yes" will not result in a loss of bonus.
+      <em>(required)</em> Did you use an external aid, such as a notepad, to complete the following question on the previous page: "Please report the items your group decided to include in the final ranking"? If so, please explain what you used it for. If not, just say "no". Note that answering "yes" will not result in a loss of bonus.
       <div class="answer">
         <textarea bind:value={response8} />
       </div>
     </li>
     <li>
-      Were there any technical difficulties during the course of your session? If
-      so, please describe what they were.
+      <em>(required)</em> Were there any technical difficulties during the course of your session? If so, please describe what they were. If not, just say "no".
       <div class="answer">
         <textarea bind:value={response9} />
       </div>
     </li>
     <li>
-      Was there anything else about the study you felt could be improved?
+      <em>(required)</em> Was there anything else about the study you felt could be improved? If so, please describe what could be improved and why it should be improved. If not, just say "no".
       <div class="answer">
         <textarea bind:value={response10} />
       </div>
     </li>
   </ol>
 
-  <em>
+  <p><em>
     Please note down any other observations you would like to share.
-  </em>
+  </em></p>
   <div class="answer">
     <textarea bind:value={response11} />
   </div>
 
-  <button on:click={onContinue}>Done</button>
+  {#if response1 && response2 && response3 && response4 && response6 
+    && response8 && response9 && response10}
+    <button on:click={onContinue}>Done</button>
+  {/if}
 </div>

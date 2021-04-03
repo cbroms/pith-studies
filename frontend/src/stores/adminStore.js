@@ -5,11 +5,13 @@ import { steps } from "../steps/steps";
 // import { steps } from "../steps/steps";
 
 const defaultState = {
+  isAdmin: false,
   session: "",
   valid: null,
   testType: 0,
-  discLink: "",
-  completionLink: "",
+  discLink: null,
+  completionLink: null,
+  cancelLink: null,
   timerStart: null,
   timerEnd: null, // timer
   readyStart: null,
@@ -45,7 +47,7 @@ export const adminStore = createDerivedSocketStore(
           const json = JSON.parse(res);
           console.log("valid", json.valid);
           update((s) => {
-            return { ...s, valid: json.valid };
+            return { ...s, valid: json.valid, isAdmin: true };
           });
           resolve();
         });
@@ -86,6 +88,19 @@ export const adminStore = createDerivedSocketStore(
             const json = JSON.parse(res);
             update((s) => {
               return { ...s, completionLink: json.prolific_link };
+            });
+            resolve(); 
+          }
+        );
+      }
+    },
+    setCancelLink: (session, cancelLink, resolve, reject) => {
+      return (socket, update) => {
+        socket.emit("admin_set_cancel_link", { session, cancel_link: cancelLink }, 
+          (res) => { 
+            const json = JSON.parse(res);
+            update((s) => {
+              return { ...s, cancelLink: json.cancel_link };
             });
             resolve(); 
           }
@@ -202,11 +217,11 @@ export const adminStore = createDerivedSocketStore(
         socket.on("join_study", (res) => {
           const json = JSON.parse(res);
           update((s) => {
-              console.log("join_study", json);
+            console.log("join_study", json);
+            const participantList = [...s.participantList, json.participant_id];
+            const participants = {...s.participants, [json.participant_id]: steps.CONSENT};
+            console.log("participants", participantList, participants);
             if ("timer_start" in json) {
-              const participantList = [...s.participantList, json.participant_id];
-              const participants = {...s.participants, [json.participant_id]: steps.CONSENT};
-              console.log("participants", participantList, participants);
               return { 
                 ...s, 
                 timerStart: json.timer_start,
@@ -218,7 +233,8 @@ export const adminStore = createDerivedSocketStore(
             else {
               return { 
                 ...s, 
-                participants: {...s.participants, [json.participant_id]: steps.CONSENT},
+                participantList: participantList,
+                participants: participants,
               };
             }
           });

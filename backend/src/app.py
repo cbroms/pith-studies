@@ -111,6 +111,16 @@ class AdminNamespace(AsyncNamespace):
       result = dumps(result, cls=JSONEncoder)
       return result
 
+    async def on_admin_set_cancel_link(self, sid, request):
+      """ Do this before people finish study. """
+      session = request["session"]
+      cancel_link = request["cancel_link"]
+      logger.info("admin_set_cancel_link({}, {})".format(session, cancel_link))
+      params.update_one({"session": session}, {"$set": {"cancel_link": cancel_link}})
+      result = {"cancel_link": cancel_link}
+      result = dumps(result, cls=JSONEncoder)
+      return result
+
     async def on_admin_initiate_ready(self, sid, request):
       session = request["session"]
       logger.info("admin_initiate_ready({})".format(session))
@@ -148,7 +158,7 @@ class AdminNamespace(AsyncNamespace):
       logger.info("admin_term_study({})".format(session))
       params.update_one({"session": session}, {"$set": {"term": True}})
       sess_params = params.find_one({"session": session})
-      result = {"prolific_link": sess_params["prolific_link"]}
+      result = {"cancel_link": sess_params["cancel_link"]}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "admin_term_study", result, namespace=STUDY_NS, room=TESTER_ROOM

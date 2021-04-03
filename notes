@@ -12,15 +12,21 @@ docker-compose.yml
 TODO:
   Also give them to Carley and have her sign new form (?).
 
+- check that no matter how user interacts with interface, is robust
 - extract pid from URL instead of entering it in
   Through URL participant_ID, should be able to LOAD the proper stage from server.
   admin LOAD
-- Once cancelled, any time user clicks button to server should not change db.
-- Update with new documents.
 
-- check that no matter how user interacts with interface, is robust (i.e. the 
-  if consent form checkboxes are closed/opened)
-
+X thank you page
+X Consider having a "terminate" parameter.
+X Admin, consider having a timer for the current phase so clear when should click next button.
+X If ready timer has passed, should not see ready button. 
+  Indeed, if ready ends, everyone not there get that it's over.
+  Even simpler, if discussion starts and we are not past SUBMITTED, we are cancelled.
+~ If join after ready somehow, should not see first phase timer.
+  Should not happen.
+X Once cancelled, any time user clicks button to server should not change db.
+X Update with new documents.
 X On admin side, use a map instead series of lists. Then updating state via
   studyStore is idempotent. In addition, we save participant state on server
   so upon load, can get any available data. We also load the parameters and

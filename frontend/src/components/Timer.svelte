@@ -1,10 +1,35 @@
 <script>
   import { timerStore } from "../stores/timerStore";
+  import { adminStore } from "../stores/adminStore";
   import { studyStore } from "../stores/studyStore";
   import { steps } from "../steps/steps";
 </script>
 
-{#if $timerStore && $studyStore.step <= steps.DISCUSSION}
+{#if $adminStore.isAdmin && $timerStore && $adminStore.trueEndDisc === null}
+  <div class="timer">
+  {#if $adminStore.readyStart === null}
+    {#if $timerStore === "00:00"}
+      Main study starting soon...
+    {:else}
+        Main study starts in <strong>{$timerStore}</strong>
+    {/if}
+  {:else if $adminStore.discStart === null}
+    {#if $timerStore === "00:00"}
+      Discussion starting soon...
+    {:else}
+        Discussion starts in <strong>{$timerStore}</strong>
+    {/if}
+  {:else if $adminStore.trueEndDisc === null}
+    {#if $timerStore === "00:00"}
+      Discussion ending soon...
+    {:else}
+        Discussion ends in <strong>{$timerStore}</strong>
+    {/if}
+  {/if}
+  </div>
+{/if}
+
+{#if $studyStore.isParticipant && $timerStore && $studyStore.step <= steps.DISCUSSION}
   <div class="timer">
   {#if $studyStore.step <= steps.WAITING_ROOM}
     {#if $timerStore === "00:00"}

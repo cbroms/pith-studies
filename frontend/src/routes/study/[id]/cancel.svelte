@@ -4,18 +4,19 @@
   import { studyStore } from "../../../stores/studyStore";
 
   const onRedirect = async () => {
-    console.log($studyStore.endRedirectURL);
-    goto($studyStore.endRedirectURL);
+    console.log($studyStore.cancelRedirectURL);
+    goto($studyStore.cancelRedirectURL);
   };
 </script>
 
 <div class="container-outer">
-  <h1>The study has been terminated.</h1>
-  <h2>Not enough people were available to start the discussion. 
-      Please click on the button to complete your session.</h2>
+  <h1>Your session has been terminated.</h1>
+  <h2>Either you were not able to join the discussion in time
+    or not enough people were available to start the discussion. 
+      Please click on the button to end your session.</h2>
 
   <div class="container-outer">
-      <button on:click={onRedirect}>Go to Prolific</button>
+      <button on:click={onRedirect}>Go to Prolific Home</button>
   </div>
 </div>
 

@@ -25,23 +25,24 @@
 <div class="container-outer">
   <h1>Survey: Task</h1>
 
-  <em>Short-answer</em>
+  <p><em>You will only be able to continue once you have answered all the required questions.</em></p>
+
+  <p><em>Short-answer</em></p>
   <ol>
     <li>
-      <em>(Required)</em> Please input the nickname you used during the discussion.
+      <em>(required)</em> Please input the nickname you used during the discussion. <strong>Failure to do this will result in at most $5 compensation instead of the full $10.</strong>
       <div class="answer"><input bind:value={response0} /></div>
     </li>
     <li>
-      Please report the items your group decided to include in the final
-      ranking. Justify each item in about a sentence.
+      <em>(required)</em> Please report the items your group decided to include in the final ranking. <strong>Justify each item in about a sentence. Each item justified can earn you 50 cents bonus if everyone else also justifies the item. Max $5 bonus from ten such items.</strong>
       <div class="answer"><textarea bind:value={response1} /></div>
     </li>
   </ol>
 
-  <em>Multiple Choice ((1 is low, 5 is high)</em>
+  <p><em>Multiple Choice ((1 is low, 5 is high)</em></p>
   <ol>
     <li>
-      Please rate how good you think the group plan is (1-5).
+      <em>(required)</em> Please rate how good you think the group plan is (1-5).
       <div class="answer">
         <label class="option">1<input type="radio" bind:group={response2} value={1} /></label>
         <label class="option">2<input type="radio" bind:group={response2} value={2} /></label>
@@ -51,7 +52,7 @@
       </div>
     </li>
     <li>
-      Please rate how much you feel you have contributed to the group discussion
+      <em>(required)</em> Please rate how much you feel you have contributed to the group discussion
       (1-5).
       <div class="answer">
         <label class="option">1<input type="radio" bind:group={response3} value={1} /></label>
@@ -62,7 +63,7 @@
       </div>
     </li>
     <li>
-      Please rate how much you felt your ideas were heard by the group (1-5).
+      <em>(required)</em> Please rate how much you felt your ideas were heard by the group (1-5).
       <div class="answer">
         <label class="option">1<input type="radio" bind:group={response4} value={1} /></label>
         <label class="option">2<input type="radio" bind:group={response4} value={2} /></label>
@@ -73,12 +74,12 @@
     </li>
   </ol>
 
-  <em>Please note down any other observations you would like to share.</em>
+  <p><em>Please note down any other observations you would like to share.</em></p>
   <div class="answer">
     <textarea bind:value={response5} />
   </div>
 
-  {#if response0}
+  {#if response0 && response1 && response2 && response3 && response4}
     <div><button on:click={onContinue}>Continue</button></div>
   {/if}
 </div>

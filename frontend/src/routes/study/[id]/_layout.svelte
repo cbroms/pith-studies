@@ -61,7 +61,7 @@
     } else if ($studyStore.step === steps.SURVEY_PITH) {
       goto(`/study/${id}/surveyPith`);
     } else if ($studyStore.step === steps.DONE) {
-      goto($studyStore.endRedirectURL);
+      goto(`/study/${id}/complete`);
     } else if ($studyStore.step === steps.CANCEL) {
       goto(`/study/${id}/cancel`);
     }

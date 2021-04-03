@@ -19,119 +19,120 @@
   <h1>Consent</h1>
 
   <p>
-    This task and survey is part of a research study conducted by Principal
-    Investigator Sydney Zheng with Faculty Advisor Kathleen Carley and Additional
-    Investigator Christian Broms at Carnegie Mellon University and is funded by
-    the Undergraduate Research Office at Carnegie Mellon University through the
-    Small Undergraduate Research Grant.
+    This activity is part of a research study conducted by Principal Investigator Sydney Zheng with Faculty Advisor Kathleen Carley and Additional Investigator Christian Broms at Carnegie Mellon University and is funded by the Undergraduate Research Office at Carnegie Mellon University through the Small Undergraduate Research Grant.
   </p>
 
   <p>
-    <strong>Title</strong>: "Pith"
+    <strong>Title</strong>: "Pith: A Space for Productive Discussion"
   </p>
 
   <p>
     <strong>Summary</strong>
-    <br />
-    You will be put in a group with several other participants to work together to
-    complete a collaborative task on a text-based discussion platform. After the discussion,
-    you will be redirected to a survey asking about your experience completing the
-    task and the platform itself. We request you perform the session on a laptop and
-    use either the Firefox or Chrome browser.
+  </p>
+  <p>
+    You will work online in a group with &lt;10 other participants to solve a collaborative problem on a text-based discussion platform. After the discussion, you will be redirected to a survey asking about your experience completing the task and the platform itself. We request you perform the session on a laptop and use either the Firefox or Chrome browser. 
   </p>
 
   <p>
     <strong>Purpose</strong>
-    <br />
-    The purpose of the research is to test the design of the Pith discussion platform.
+  </p>
+  <p>
+    The purpose of the research is to test the design of the Pith discussion platform that we have created.
   </p>
 
   <p>
     <strong>Procedures</strong>
-    <br />
-    <em>Duration</em>: Overall, we expect your session to take 30-40 minutes.
-    <br />
-    We are recruiting participants through Prolific. Participants will be asked to
-    read and approve a consent form, read the instructions, and then wait in the waiting
-    room. After about 5-15 minutes, they should receive a button they can click to
-    start the discussion.
-    <br />
-    Participants will have exactly 15 minutes to work together on the Pith discussion
-    platform to solve the Stranded challenge. The goal is to identify and rank 10 items
-    they would take with them as a group if all of them are stranded.
-    <br />
-    Once the 15 minutes are up, the participants will be redirected to a Qualtrics
-    survey, which they should be able to complete in about 10 minutes. Once they are
-    done, they will be redirected to the Prolific site and their session is complete.
   </p>
-
+  <p>
+    <em>Duration</em>: Overall, we expect your session to take 30-40 minutes.
+  </p>
+  <p>
+    You will be asked to read and approve the consent form, read the instructions, and then wait in the waiting room for other participants to join the session. There will be a timer present from the moment you see the consent form to indicate how much time you have left until you should be in the waiting room. You should have between 5-15 minutes. 
+  </p>
+  <p>
+    If you are in the waiting room, you will receive a button that you can click on to join the discussion around the time the timer finishes. You must click the button within a minute after seeing it. <strong>If you do not enter the waiting room in time and click on the button, you will not be able to progress further in the study.</strong>
+  </p>
+  <p>
+    You will have exactly 15 minutes to work with the others in the discussion on the Pith platform to solve the Stranded problem. The goal is to identify and rank 10 items you would take with you as a group if all of you are stranded. 
+  </p>
+  <p>
+    Once the 15 minutes are up, you will be redirected to a survey, which you should be able to complete in about 10 minutes. Once you are done, you will be redirected to the Prolific site and your session is complete.
+  </p>
+  <p>
+    NOTE: In the case that there are fewer than <em>three</em> people that are ready to start the discussion, the discussion will also not continue. The study will end early, and if you have clicked the button in the waiting room, you can be redirected to Prolific.
+  </p>
+  
   <p>
     <strong>Participant Requirements</strong>
-    <br />
-    Participation in this study is limited to individuals age 18 and older and who
-    can speak English fluently.
+  </p>
+  <p>
+    Participation in this study is limited to individuals who are age 18 and older, can speak English fluently, have a Prolific approval rating >95%, and have not been in a previous study with us.
+  </p>
+  <p>
+    We also require that you have done between 100-10000 Prolific studies previously.
   </p>
 
   <p>
     <strong>Risks</strong>
-    <br />
-    The risks and discomfort associated with participation in this study are no greater
-    than those ordinarily encountered in daily life or while interacting with others
-    in online activities.
+  </p>
+  <p>
+    The risks and discomfort associated with participation in this study are no greater than those ordinarily encountered in daily life or while interacting with others in online activities.
   </p>
 
   <p>
     <strong>Benefits</strong>
-    <br />
-    Participants can receive compensation.
+  </p>
+  <p>
+    Participants may enjoy using and contributing feedback about a novel discussion platform aimed at productive large-scale discussion.
   </p>
 
   <p>
     <strong>Compensation & Costs</strong>
-    <br />
-    There is a $10 compensation for successful completion of the study, should your
-    response be accepted. There is the possibility for a maximum of $5 bonus.
-    <br />
-    There will be no cost to you if you participate in this study.
+  </p>
+  <p>
+    <em>Compensation</em>
+  </p>
+    <ul>
+      <li>If you sign the consent form, participate in the discussion, and complete the survey, you will receive the full payment of $10.</li>
+      <li>After the discussion and in the survey, you will be asked to report the items your group decided to include and say why you’ve included each item. For each item that <em>all</em> members of the group reported was in the ranking with at least a sentence of justification, each member of the group will receive an additional 50 cents in bonus. Maximum $5 bonus from ten such items.</li>
+      <li>If you sign the consent form and participate in the discussion but do not complete the survey for whatever reason, you will be given $5. Note that the survey will not be considered complete if you do not answer the required questions, or if the nickname you report you used in the discussion is invalid.</li>
+      <li>You will receive $2.50 if you sign the consent form and make an effort to reach the waiting room, but are not able to reach the discussion or the study has too few people to continue to the discussion stage. If you do not consent to participate via the online consent form, you will not be given any compensation.</li>
+    </ul>
+  <p>
+    <em>Cost</em>
+  </p>
+  <p>
+    There will be no cost to you if you participate in this study. 
   </p>
 
   <p>
     <strong>Confidentiality</strong>
-    <br />
-    The data captured for the research does not include any personally identifiable
-    information about you. Your IP address will not be captured. We will record your
-    Prolific participant ID.
-    <br />
-    We will have access to your discussion even after its conclusion. Therefore, we
-    will know your nickname and associated contributions to the discussion. We will
-    also have access to your answers to the survey.
-    <br />
-    By participating in this research, you understand and agree that Carnegie Mellon
-    may be required to disclose your consent form, data and other personally identifiable
-    information as required by law, regulation, subpoena or court order. Otherwise,
-    your confidentiality will be maintained in the following manner:
-    <br />
-    Your data and consent form will be kept separate. Your consent form will be stored
-    in a secure location on Carnegie Mellon property and will not be disclosed to third
-    parties. By participating, you understand and agree that the data and information
-    gathered during this study may be used by Carnegie Mellon and published and/or
-    disclosed by Carnegie Mellon to others outside of Carnegie Mellon. However, your
-    name, address, contact information and other direct personal identifiers will not
-    be mentioned in any such publication or dissemination of the research data and/or
-    results by Carnegie Mellon. Note that per regulation all research data must be
-    kept for a minimum of 3 years.
+  </p>
+  <p>
+    The data captured for the research does not include any personally identifiable information about you.  Your IP address will not be captured. We will record your Prolific participant ID.
+  </p>
+  <p>
+    We will be collecting a record of the discussion between you and the other participants in your group while using our platform. Therefore, we will need to know your “nickname”, your discussion username, in order to determine your contributions to the discussion.
+  </p>
+  <p>
+    By participating in this research, you understand and agree that Carnegie Mellon may be required to disclose your consent form, data and other personally identifiable information as required by law, regulation, subpoena or court order.  Otherwise, your confidentiality will be maintained in the following manner:
+  </p>
+  <p>
+    Your data and consent form will be kept separate. Your consent form will be stored in a secure location on Carnegie Mellon property and will not be disclosed to third parties. By participating, you understand and agree that the data and information gathered during this study may be used by Carnegie Mellon and published and/or disclosed by Carnegie Mellon to others outside of Carnegie Mellon.  However, your name, address, contact information and other direct personal identifiers will not be mentioned in any such publication or dissemination of the research data and/or results by Carnegie Mellon. Note that per regulation all research data must be kept for a minimum of 3 years.
   </p>
 
   <p>
     <strong>Right to Ask Questions &amp; Contact Information</strong>
-    <br />
+  </p>
+  <p>
     If you have any questions about this study, you should feel free to ask them by
     contacting the Principal Investigator now through email at
     <a href="mailto:slzheng@andrew.cmu.edu">slzheng@andrew.cmu.edu</a>. If you
     have questions later, desire additional information, or wish to withdraw your
     participation please contact the Principal Investigator through the contact
     information listed above.
-    <br />
+  </p>
+  <p>
     If you have questions pertaining to your rights as a research participant; or to
     report concerns to this study, you should contact the Office of Research integrity
     and Compliance at Carnegie Mellon University. Email:
@@ -141,7 +142,8 @@
 
   <p>
     <strong>Voluntary Participation</strong>
-    <br />
+  </p>
+  <p>
     Your participation in this research is voluntary. You may discontinue participation
     at any time during the research activity. You may print a copy of this consent
     form for your records.

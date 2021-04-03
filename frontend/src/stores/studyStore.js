@@ -6,10 +6,12 @@ import { studySocket } from "./socket";
 import { steps } from "../steps/steps";
 
 const defaultState = {
+  isParticipant: false,
   valid: null,
   session: "",
   pid: "",
   step: steps.WELCOME,
+  cancelRedirectURL: "",
   endRedirectURL: "",
   discussionURL: "",
   testType: null, // gives tutorial
@@ -29,7 +31,7 @@ export const studyStore = createDerivedSocketStore(
           const json = JSON.parse(res);
           console.log("valid", json.valid);
           update((s) => {
-            return { ...s, valid: json.valid };
+            return { ...s, valid: json.valid, isParticipant: true };
           });
           resolve();
         });
@@ -192,7 +194,7 @@ export const studyStore = createDerivedSocketStore(
             return { 
               ...s, 
               step: steps.CANCEL,
-              endRedirectURL: json.prolific_link
+              cancelRedirectURL: json.cancel_link
             };
           });
         });
@@ -209,8 +211,11 @@ export const studyStore = createDerivedSocketStore(
                 discEnd: json.disc_end
               };
             }
-            else { // no change
-              return {...s};
+            else { // not able to start in time
+              return {
+                ...s,
+                step: steps.CANCEL,
+            };
             }
           });
         });
