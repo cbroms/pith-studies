@@ -27,17 +27,14 @@
     socket.initialize(CONNECTION, "Study");
   });
 
-  afterUpdate(() => { 
-
+  afterUpdate(() => {
     if ($studyStore.step == steps.CONSENT && stage === 0) {
       timerStore.initialize($studyStore.timerEnd);
       stage += 1;
-    } 
-    else if ($studyStore.step === steps.WAITING_ROOM_READY && stage === 1) {
+    } else if ($studyStore.step === steps.WAITING_ROOM_READY && stage === 1) {
       timerStore.initialize($studyStore.readyEnd);
       stage += 1;
-    }
-    else if ($studyStore.step == steps.DISCUSSION && stage === 2) {
+    } else if ($studyStore.step == steps.DISCUSSION && stage === 2) {
       timerStore.initialize($studyStore.discEnd);
       stage += 1;
     }

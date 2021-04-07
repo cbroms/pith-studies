@@ -1,0 +1,34 @@
+version: "3"
+services:
+  balancer:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/balancer.Dockerfile
+    depends_on:
+      - app
+      - static
+    restart: always
+    network_mode: "host"
+  app:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/app.prod.Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      MONGODB_CONN: ${MONGO}
+      MONGODB_NAME: ${MONGO_NAME}
+    working_dir: /api
+  static:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/static.prod.Dockerfile
+    depends_on:
+      - app
+    working_dir: /static
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    environment:
+      BACKEND_HOST: ${HOST_NAME}
+      BACKEND_PORT: ${HOST_PORT}
