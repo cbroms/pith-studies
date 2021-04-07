@@ -9,9 +9,6 @@
   let response6 = null;
   let response7 = null;
   let response8 = null;
-  let response9 = null;
-  let response10 = null;
-  let response11 = null;
 
   const onContinue = async () => {
     const answers = {
@@ -23,9 +20,6 @@
       response6: response6,
       response7: response7,
       response8: response8,
-      response9: response9,
-      response10: response10,
-      response11: response11,
     };
 
     await studyStore.surveyPithComplete($studyStore.session, $studyStore.pid, answers);
@@ -40,34 +34,15 @@
   <p><em>Short-answer</em></p>
   <ol>
     <li>
-      <em>(required)</em> Please describe what you liked about the platform. If there is nothing you like about the platform, answer 'N/A'. 
+      <em>(required)</em> Please describe what you liked about the platform. 
       <div class="answer">
         <textarea bind:value={response1} />
       </div>
     </li>
     <li>
-      <em>(required)</em> Please describe what you disliked about the platform. If there is nothing you dislike about the platform, answer 'N/A'. 
+      <em>(required)</em> Please describe what you disliked about the platform.
       <div class="answer">
         <textarea bind:value={response2} />
-      </div>
-    </li>
-    <li>
-      <em>(required)</em> Were there any features you felt were especially useful and why? If there are no features you felt were especially useful, answer 'N/A'.
-      <div class="answer">
-        <textarea bind:value={response3} />
-      </div>
-    </li>
-    <li>
-      <em>(required)</em> Were there any features in the interface that were confusing and why? If there are no features you felt were confusing, answer 'N/A'.
-      <div class="answer">
-        <textarea bind:value={response4} />
-      </div>
-    </li>
-    <li>
-      How does Pith compare to other similar platforms you have used, such as text
-      messaging, Slack, Discord, Reddit, etc.?
-      <div class="answer">
-        <textarea bind:value={response5} />
       </div>
     </li>
   </ol>
@@ -77,16 +52,16 @@
     <li>
       <em>(required)</em> How easy is it to use Pith (scale of 1-10)?
       <div class="answer">
-        <label class="option">1<input type="radio" bind:group={response6} value={1} /></label>
-        <label class="option">2<input type="radio" bind:group={response6} value={2} /></label>
-        <label class="option">3<input type="radio" bind:group={response6} value={3} /></label>
-        <label class="option">4<input type="radio" bind:group={response6} value={4} /></label>
-        <label class="option">5<input type="radio" bind:group={response6} value={5} /></label>
-        <label class="option">6<input type="radio" bind:group={response6} value={6} /></label>
-        <label class="option">7<input type="radio" bind:group={response6} value={7} /></label>
-        <label class="option">8<input type="radio" bind:group={response6} value={8} /></label>
-        <label class="option">9<input type="radio" bind:group={response6} value={9} /></label>
-        <label class="option">10<input type="radio" bind:group={response6} value={10} /></label>
+        <label class="option">1<input type="radio" bind:group={response3} value={1} /></label>
+        <label class="option">2<input type="radio" bind:group={response3} value={2} /></label>
+        <label class="option">3<input type="radio" bind:group={response3} value={3} /></label>
+        <label class="option">4<input type="radio" bind:group={response3} value={4} /></label>
+        <label class="option">5<input type="radio" bind:group={response3} value={5} /></label>
+        <label class="option">6<input type="radio" bind:group={response3} value={6} /></label>
+        <label class="option">7<input type="radio" bind:group={response3} value={7} /></label>
+        <label class="option">8<input type="radio" bind:group={response3} value={8} /></label>
+        <label class="option">9<input type="radio" bind:group={response3} value={9} /></label>
+        <label class="option">10<input type="radio" bind:group={response3} value={10} /></label>
       </div>
     </li>
   </ol>
@@ -95,7 +70,7 @@
     Please note down any other observations you would like to share.
   </em></p>
   <div class="answer">
-    <textarea bind:value={response7} />
+    <textarea bind:value={response4} />
   </div>
 
   <h1>Survey: Pilot</h1>
@@ -105,19 +80,19 @@
     <li>
       <em>(required)</em> Did you use an external aid, such as a notepad, to complete the following question on the previous page: "Please report the items your group decided to include in the final ranking"? If so, please explain what you used it for. If not, just say "no". Note that answering "yes" will not result in a loss of bonus.
       <div class="answer">
-        <textarea bind:value={response8} />
+        <textarea bind:value={response5} />
       </div>
     </li>
     <li>
       <em>(required)</em> Were there any technical difficulties during the course of your session? If so, please describe what they were. If not, just say "no".
       <div class="answer">
-        <textarea bind:value={response9} />
+        <textarea bind:value={response6} />
       </div>
     </li>
     <li>
       <em>(required)</em> Was there anything else about the study you felt could be improved? If so, please describe what could be improved and why it should be improved. If not, just say "no".
       <div class="answer">
-        <textarea bind:value={response10} />
+        <textarea bind:value={response7} />
       </div>
     </li>
   </ol>
@@ -126,11 +101,11 @@
     Please note down any other observations you would like to share.
   </em></p>
   <div class="answer">
-    <textarea bind:value={response11} />
+    <textarea bind:value={response8} />
   </div>
 
-  {#if response1 && response2 && response3 && response4 && response6 
-    && response8 && response9 && response10}
+  {#if response1 && response2 && response3 && response5 && response6 
+    && response7}
     <button on:click={onContinue}>Done</button>
   {/if}
 </div>

@@ -45,15 +45,30 @@
   </ol>
 
   <p>
-    <em>Payment</em>
+    <strong>Payment</strong>
   </p>
-  <ul>
-    <li>If you sign the consent form, participate in the discussion, and complete the survey, you will receive the full payment of $10.</li>
-    <li>After the discussion and in the survey, you will be asked to report the items your group decided to include and say why you’ve included each item. For each item that <em>all</em> members of the group reported was in the ranking with at least a sentence of justification, each member of the group will receive an additional 50 cents in bonus. Maximum $5 bonus from ten such items.</li>
-    <li>If you sign the consent form and participate in the discussion but do not complete the survey for whatever reason, you will be given $5. Note that the survey will not be considered complete if you do not answer the required questions, or if the nickname you report you used in the discussion is invalid.</li>
-    <li>You will receive $2.50 if you sign the consent form and make an effort to reach the waiting room, but are not able to reach the discussion in time or the study has too few people to continue to the discussion stage. If you do not consent to participate via the online consent form, you will not be given any compensation.</li>
-  </ul>
 
+	<p><em>Base compensation</em></p>
+	<p>If you sign the consent form, participate in the discussion, and complete the survey, you will receive the full payment of $10.<p> 
+
+	<p><em>Bonus</em></p>
+	<p>After the discussion and in the survey, you will be asked to report the items your group decided to include and say why you've included each item. For each item that <em>all</em> members of the group reported was in the ranking with at least a sentence of justification, each member of the group will receive an additional 50 cents in bonus. Maximum $5 bonus from ten such items.<p>
+
+	<p><em>If you are unable to finish</em></p>
+	<ul>
+		<li>
+			If you sign the consent form and participate in the discussion but do not complete the survey for whatever reason, you will be given $5 and no bonus. Note that the survey will not be considered complete if you do not answer the required questions, or if the nickname you report you used in the discussion is invalid.
+		</li>
+		<li>
+			You will receive $2.50 and no bonus if you sign the consent form and make an effort to reach the waiting room, but are not able to reach the discussion in time. 
+		</li>
+	</ul>
+
+	<p><em>If the study terminates early</em></p>
+	<p>You will receive $2.50 and no bonus if you sign the consent form and make an effort to reach the waiting room, but the study has too few people to continue to the discussion stage.</p>
+
+	<p><em>If you do not consent to the study</em></p>
+	<p>If you do not consent to participate via the online consent form, you will not be given any compensation or bonus.</p>
 
   <button on:click={onContinue}>Continue</button>
 </div>
