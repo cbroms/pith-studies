@@ -181,7 +181,7 @@
 
     {#if consent1 && consent2}
       <div>
-        <strong class="sign">I want to participate in this research and continue with the task and survey.</strong>
+        <strong class="sign">I want to participate in this research and continue with the activity.</strong>
         <label class="option">Yes<input type="radio" bind:group={consent3} value={true} /></label>
         <label class="option">No<input type="radio" bind:group={consent3} value={false} /></label>
       </div>

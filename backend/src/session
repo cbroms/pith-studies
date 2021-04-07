@@ -1628,3 +1628,18 @@
 2021-04-07 17:26:06,162 INFO admin_end_disc(aria)
 2021-04-07 17:26:15,311 INFO end_survey_task(aria, meep, {'response0': 'h', 'response1': 'h', 'response2': 3, 'response3': 2, 'response4': 5, 'response5': None})
 2021-04-07 17:26:25,270 INFO end_survey_pith(aria, meep, {'response1': 'h', 'response2': 'h', 'response3': 3, 'response4': None, 'response5': 'h', 'response6': 'h', 'response7': 'h', 'response8': None})
+2021-04-07 17:29:47,295 INFO Mongo: mongodb+srv://pith_studies_admin:8Woh19ngeuhE8wDISo@cluster0.fh4fj.mongodb.net/pith_studies?retryWrites=true&w=majority pith_studies
+2021-04-07 17:29:48,101 INFO Mongo: mongodb+srv://pith_studies_admin:8Woh19ngeuhE8wDISo@cluster0.fh4fj.mongodb.net/pith_studies?retryWrites=true&w=majority pith_studies
+2021-04-07 17:30:05,567 INFO admin_study_setup(bellus)
+2021-04-07 17:30:06,114 INFO admin_test_connect(bellus)
+2021-04-07 17:30:15,365 INFO test_connect(bellus, default)
+2021-04-07 17:30:17,529 INFO join_study(bellus, meep)
+2021-04-07 17:31:04,693 INFO end_consent(bellus, meep, True, True, True)
+2021-04-07 17:31:09,883 INFO end_instr(bellus, meep)
+2021-04-07 17:31:23,897 INFO admin_set_test_type(bellus, 2)
+2021-04-07 17:31:26,575 INFO admin_set_cancel_link(bellus, https://why.pith.is)
+2021-04-07 17:31:26,977 INFO admin_set_prolific_link(bellus, https://why.pith.is)
+2021-04-07 17:31:27,553 INFO admin_set_disc_link(bellus, https://why.pith.is)
+2021-04-07 17:31:30,174 INFO end_instr(bellus, meep)
+2021-04-07 17:31:42,789 INFO end_tutorial(bellus, meep)
+2021-04-07 17:32:03,984 INFO admin_start_disc(bellus)
