@@ -50,7 +50,7 @@
   <p><em>Multiple Choice (1 is low, 10 is high)</em></p>
   <ol>
     <li>
-      <em>(required)</em> How easy is it to use Pith (scale of 1-10)?
+      <em>(required)</em> How easy is it to use the platform (scale of 1-10, 1 being hard, 10 being easy)?
       <div class="answer">
         <label class="option">1<input type="radio" bind:group={response3} value={1} /></label>
         <label class="option">2<input type="radio" bind:group={response3} value={2} /></label>

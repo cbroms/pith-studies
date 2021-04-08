@@ -39,10 +39,10 @@
     </li>
   </ol>
 
-  <p><em>Multiple Choice ((1 is low, 5 is high)</em></p>
+  <p><em>Multiple Choice (1 is low, 5 is high)</em></p>
   <ol>
     <li>
-      <em>(required)</em> Please rate how good you think the group plan is (1-5).
+      <em>(required)</em> Please rate how good you think the group plan is (1-5, 1 being bad, 5 being good).
       <div class="answer">
         <label class="option">1<input type="radio" bind:group={response2} value={1} /></label>
         <label class="option">2<input type="radio" bind:group={response2} value={2} /></label>
@@ -53,7 +53,7 @@
     </li>
     <li>
       <em>(required)</em> Please rate how much you feel you have contributed to the group discussion
-      (1-5).
+      (1-5, 1 being not at all, 5 being a lot).
       <div class="answer">
         <label class="option">1<input type="radio" bind:group={response3} value={1} /></label>
         <label class="option">2<input type="radio" bind:group={response3} value={2} /></label>
@@ -63,7 +63,7 @@
       </div>
     </li>
     <li>
-      <em>(required)</em> Please rate how much you felt your ideas were heard by the group (1-5).
+      <em>(required)</em> Please rate how much you felt your ideas were heard by the group (1-5, 1 being not at all, 5 being a lot).
       <div class="answer">
         <label class="option">1<input type="radio" bind:group={response4} value={1} /></label>
         <label class="option">2<input type="radio" bind:group={response4} value={2} /></label>

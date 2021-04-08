@@ -47,6 +47,7 @@ textarea {
   font-size: 20px;
   box-sizing: border-box;
   width: 100%;
+  height: 160px;
   background: white;
   border: 2px solid black;
 }
@@ -82,7 +83,7 @@ input[type="radio"]:checked {
 
 iframe {
   width: 100%;
-  min-height: 99vh;
+  min-height: calc(100vh - 72px);
 }
 
 .option {
