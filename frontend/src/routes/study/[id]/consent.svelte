@@ -68,9 +68,9 @@
   <p>
     Participation in this study is limited to individuals who are age 18 and older, can speak English fluently, have a Prolific approval rating >95%, and have not been in a previous study with us.
   </p>
-  <p>
+  <!-- <p>
     We also require that you have done between 100-10000 Prolific studies previously.
-  </p>
+  </p> -->
 
   <p>
     <strong>Risks</strong>

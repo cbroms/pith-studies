@@ -12,7 +12,6 @@
   import { parseTime } from "../../utils/parseTime";
 
   import { adminStore } from "../../stores/adminStore";
-  import { timerStore } from "../../stores/timerStore";
 
   import { steps } from "../../steps/steps";
 
@@ -31,14 +30,6 @@
     else {
       goto("/404");
     }
-  });
-
-  afterUpdate(() => {
-    /*
-    if ($adminStore.timerEnd && $timerStore === null) {
-      timerStore.initialize($adminStore.timerEnd);
-    } 
-    */
   });
 
   const onDiscLink = async () => {
