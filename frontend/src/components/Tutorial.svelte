@@ -62,7 +62,14 @@
 <img src="tutorial/3.png" alt="Adding a reference to the chat" />
 <p>The referenced message will be shown above your message.</p>
 <img src="tutorial/4.png" alt="The reference displayed in a message" />
-
+<h3>Flairing your message</h3>
+<p>
+  You can add a "Flair" to your message by selecting one or more of the flairs
+  underneath the editor before sending your message.
+</p>
+<img src="tutorial/13.png" alt="Selecting a flair" />
+<p>The flair will be displayed alongside your message in the chat.</p>
+<img src="tutorial/14.png" alt="A flair on a message" />
 {#if $studyStore.testType === 2 || $studyStore.testType === 3}
   <h2>The Summary</h2>
   <h3>Pinning messages</h3>
