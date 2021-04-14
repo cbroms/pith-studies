@@ -16,25 +16,34 @@
       response2: response2,
       response3: response3,
       response4: response4,
-      response5: response5,
-      response6: response6,
-      response7: response7,
-      response8: response8,
+      //   response5: response5,
+      //   response6: response6,
+      //   response7: response7,
+      //   response8: response8,
     };
 
-    await studyStore.surveyPithComplete($studyStore.session, $studyStore.pid, answers);
+    await studyStore.surveyPithComplete(
+      $studyStore.session,
+      $studyStore.pid,
+      answers
+    );
   };
 </script>
 
 <div class="container-outer">
   <h1>Survey: Discussion Platform</h1>
 
-  <p><em>You will only be able to continue once you have answered all the required questions.</em></p>
+  <p>
+    <em
+      >You will only be able to continue once you have answered all the required
+      questions.</em
+    >
+  </p>
 
   <p><em>Short-answer</em></p>
   <ol>
     <li>
-      <em>(required)</em> Please describe what you liked about the platform. 
+      <em>(required)</em> Please describe what you liked about the platform.
       <div class="answer">
         <textarea bind:value={response1} />
       </div>
@@ -50,30 +59,51 @@
   <p><em>Multiple Choice (1 is low, 10 is high)</em></p>
   <ol>
     <li>
-      <em>(required)</em> How easy is it to use the platform (scale of 1-10, 1 being hard, 10 being easy)?
+      <em>(required)</em> How easy is it to use the platform (scale of 1-10, 1
+      being hard, 10 being easy)?
       <div class="answer">
-        <label class="option">1<input type="radio" bind:group={response3} value={1} /></label>
-        <label class="option">2<input type="radio" bind:group={response3} value={2} /></label>
-        <label class="option">3<input type="radio" bind:group={response3} value={3} /></label>
-        <label class="option">4<input type="radio" bind:group={response3} value={4} /></label>
-        <label class="option">5<input type="radio" bind:group={response3} value={5} /></label>
-        <label class="option">6<input type="radio" bind:group={response3} value={6} /></label>
-        <label class="option">7<input type="radio" bind:group={response3} value={7} /></label>
-        <label class="option">8<input type="radio" bind:group={response3} value={8} /></label>
-        <label class="option">9<input type="radio" bind:group={response3} value={9} /></label>
-        <label class="option">10<input type="radio" bind:group={response3} value={10} /></label>
+        <label class="option"
+          >1<input type="radio" bind:group={response3} value={1} /></label
+        >
+        <label class="option"
+          >2<input type="radio" bind:group={response3} value={2} /></label
+        >
+        <label class="option"
+          >3<input type="radio" bind:group={response3} value={3} /></label
+        >
+        <label class="option"
+          >4<input type="radio" bind:group={response3} value={4} /></label
+        >
+        <label class="option"
+          >5<input type="radio" bind:group={response3} value={5} /></label
+        >
+        <label class="option"
+          >6<input type="radio" bind:group={response3} value={6} /></label
+        >
+        <label class="option"
+          >7<input type="radio" bind:group={response3} value={7} /></label
+        >
+        <label class="option"
+          >8<input type="radio" bind:group={response3} value={8} /></label
+        >
+        <label class="option"
+          >9<input type="radio" bind:group={response3} value={9} /></label
+        >
+        <label class="option"
+          >10<input type="radio" bind:group={response3} value={10} /></label
+        >
       </div>
     </li>
   </ol>
 
-  <p><em>
-    Please note down any other observations you would like to share.
-  </em></p>
+  <p>
+    <em> Please note down any other observations you would like to share. </em>
+  </p>
   <div class="answer">
     <textarea bind:value={response4} />
   </div>
 
-  <h1>Survey: Pilot</h1>
+  <!-- <h1>Survey: Pilot</h1>
 
   <p><em>Short-answer</em></p>
   <ol>
@@ -102,10 +132,9 @@
   </em></p>
   <div class="answer">
     <textarea bind:value={response8} />
-  </div>
+  </div> -->
 
-  {#if response1 && response2 && response3 && response5 && response6 
-    && response7}
+  {#if response1 && response2 && response3}
     <button on:click={onContinue}>Done</button>
   {/if}
 </div>
