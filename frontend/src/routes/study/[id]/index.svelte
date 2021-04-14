@@ -10,7 +10,6 @@
   import { goto } from "@sapper/app";
 
   import { studyStore } from "../../../stores/studyStore";
-  import { timerStore } from "../../../stores/timerStore";
 
   export let id;
 

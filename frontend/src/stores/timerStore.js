@@ -28,11 +28,15 @@ const createTimerStore = () => {
     const createTime = () => {
       const curr = dayjs();
       const remaining = end.diff(curr);
+      let warning = false;
+      if (remaining < 60000) { // ms
+        warning = true;
+      }
       if (remaining < 0) {
-        return "00:00"; // can't be "", otherwise doesn't work
+        return {remaining: "00:00", warning}; // can't be "", otherwise doesn't work
       }
       else {
-        return dayjs.duration(remaining).format("mm:ss"); // string
+        return {remaining: dayjs.duration(remaining).format("mm:ss"), warning}; // string
       }
     }; 
     set(createTime());

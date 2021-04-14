@@ -8,49 +8,51 @@
 </script>
 
 {#if $adminStore.isAdmin && $timerStore && $adminStore.trueEndDisc === null}
-  <div class="timer">
+  <p>{$timerStore.warning}</p>
+  <div class="timer" class:flash={$timerStore.warning}>
     {#if $adminStore.readyStart === null}
-      {#if $timerStore === "00:00"}
+      {#if $timerStore.remaining === "00:00"}
         Main study starting soon...
       {:else}
-        Main study starts in <strong>{$timerStore}</strong>
+        Main study starts in <strong>{$timerStore.remaining}</strong>
       {/if}
     {:else if $adminStore.discStart === null}
-      {#if $timerStore === "00:00"}
+      {#if $timerStore.remaining === "00:00"}
         Discussion starting soon...
       {:else}
-        Discussion starts in <strong>{$timerStore}</strong>
+        Discussion starts in <strong>{$timerStore.remaining}</strong>
       {/if}
     {:else if $adminStore.trueEndDisc === null}
-      {#if $timerStore === "00:00"}
+      {#if $timerStore.remaining === "00:00"}
         Discussion ending soon...
       {:else}
-        Discussion ends in <strong>{$timerStore}</strong>
+        Discussion ends in <strong>{$timerStore.remaining}</strong>
       {/if}
     {/if}
   </div>
 {/if}
 
-{#if $studyStore.isParticipant && $timerStore && $studyStore.step <= steps.DISCUSSION}
-  <div class="timer">
+{#if $studyStore.isParticipant && $timerStore 
+  && $studyStore.step <= steps.DISCUSSION}
+  <div class="timer" class:flash={$timerStore.warning}>
     <div>
       {#if $studyStore.step <= steps.WAITING_ROOM}
-        {#if $timerStore === "00:00"}
+        {#if $timerStore.remaining === "00:00"}
           Main study starting soon...
         {:else}
-          Main study starts in <strong>{$timerStore}</strong>
+          Main study starts in <strong>{$timerStore.remaining}</strong>
         {/if}
       {:else if $studyStore.step <= steps.WAITING_ROOM_READY_SUBMITTED}
-        {#if $timerStore === "00:00"}
+        {#if $timerStore.remaining === "00:00"}
           Discussion starting soon...
         {:else}
-          Discussion starts in <strong>{$timerStore}</strong>
+          Discussion starts in <strong>{$timerStore.remaining}</strong>
         {/if}
       {:else if $studyStore.step <= steps.DISCUSSION}
-        {#if $timerStore === "00:00"}
+        {#if $timerStore.remaining === "00:00"}
           Discussion ending soon...
         {:else}
-          Discussion ends in <strong>{$timerStore}</strong>
+          Discussion ends in <strong>{$timerStore.remaining}</strong>
         {/if}
       {/if}
     </div>
@@ -64,6 +66,10 @@
 {/if}
 
 <style>
+  .flash {
+    background-color: indianred !important;
+  }
+
   .timer {
     max-width: 800px;
     width: 100%;
