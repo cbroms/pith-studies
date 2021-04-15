@@ -8,7 +8,6 @@
 </script>
 
 {#if $adminStore.isAdmin && $timerStore && $adminStore.trueEndDisc === null}
-  <p>{$timerStore.warning}</p>
   <div class="timer" class:flash={$timerStore.warning}>
     {#if $adminStore.readyStart === null}
       {#if $timerStore.remaining === "00:00"}
