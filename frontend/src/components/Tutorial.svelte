@@ -75,7 +75,7 @@
   <h3>Pinning messages</h3>
   <p>
     You can add a message to your discussion's "summary" by hovering over the
-    message and clicking "Pin &rarr;"
+    message and clicking "Pin &rarr;".
   </p>
   <img src="tutorial/5.png" alt="Pinning a message" />
   <img src="tutorial/6.png" alt="The pinned message displayed in the summary" />
