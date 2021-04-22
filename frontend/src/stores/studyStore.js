@@ -15,27 +15,29 @@ const defaultState = {
   endRedirectURL: "",
   discussionURL: "",
   testType: null, // gives tutorial
-  timerEnd: null, // timer 
+  timerEnd: null, // timer
   readyEnd: null, // timer
   discEnd: null, // timer
+  trueEndDisc: null,
+  initTimer: false,
 };
 
 export const studyStore = createDerivedSocketStore(
   studySocket,
   {
-    checkSession: (session, pid, resolve, reject) => {
-      if (!pid)
-        pid = "default";
+    checkSession: (session, resolve, reject) => {
       return (socket, update) => {
-        socket.emit("test_connect", {session, participant_id: pid}, (res) => {
+        socket.emit("test_connect", { session }, (res) => {
           const json = JSON.parse(res);
           console.log("valid", json.valid);
           update((s) => {
-            return { ...s, valid: json.valid, isParticipant: true };
+            const newS = { ...s, valid: json.valid, isParticipant: true };
+            console.log("checkSession", newS);
+            return newS;
           });
           resolve();
         });
-      }
+      };
     },
     joinStudy: (session, pid, resolve, reject) => {
       return (socket, update) => {
@@ -43,16 +45,61 @@ export const studyStore = createDerivedSocketStore(
         socket.emit("join_study", { session, participant_id: pid }, (res) => {
           const json = JSON.parse(res);
           update((s) => {
-            return { 
-              ...s, 
-              session: session, 
+            const newS = {
+              ...s,
+              session: session,
               pid: pid,
               step: steps.CONSENT,
               timerEnd: json.timer_end,
+              initTimer: false,
             };
+            console.log("joinStudy", newS);
+            return newS;
           });
           resolve();
         });
+      };
+    },
+    reload: (session, pid, resolve, reject) => {
+      // assume already joined study
+      return (socket, update) => {
+        console.log("reload", socket);
+        socket.emit("reload_study", { session, participant_id: pid }, (res) => {
+          console.log("reload", res);
+          const json = JSON.parse(res);
+          update((s) => {
+            const newS = {
+              ...s,
+              isParticipant: true,
+              valid: true,
+              session: session,
+              pid: pid,
+              step: json.stage,
+              cancelRedirectURL: json.cancel_link,
+              endRedirectURL: json.prolific_link,
+              discussionURL: json.disc_link,
+              testType: json.test_type, // gives tutorial
+              timerEnd: json.timer_end, // timer
+              readyEnd: json.ready_end, // timer
+              discEnd: json.disc_end, // timer
+              trueEndDisc: json.end_disc,
+              initTimer: false,
+            };
+            return newS;
+          });
+          resolve();
+        });
+      };
+    },
+    initTimer: (resolve, reject) => {
+      return (socket, update) => {
+        update((s) => {
+          return {
+            ...s,
+            initTimer: true,
+          };
+        });
+        resolve();
       };
     },
     consentComplete: (
@@ -76,12 +123,15 @@ export const studyStore = createDerivedSocketStore(
             // this should always work
             if (json.accepted) {
               update((s) => {
-                return { ...s, step: steps.INSTRUCTIONS };
+                const newS = { ...s, step: steps.INSTRUCTIONS };
+                console.log("consentComplete", newS);
+                return newS;
               });
-            }
-            else {
+            } else {
               update((s) => {
-                return { ...s }; // stay on same page
+                const newS = { ...s }; // stay on same page
+                console.log("consentComplete", newS);
+                return newS;
               });
             }
             resolve();
@@ -92,47 +142,45 @@ export const studyStore = createDerivedSocketStore(
     instructionsComplete: (session, pid, resolve, reject) => {
       return (socket, update) => {
         console.log("instructions_complete", pid);
-        socket.emit(
-          "end_instr",
-          { session, participant_id: pid },
-          (res) => {
-            const json = JSON.parse(res);
-            update((s) => {
-              return { ...s, step: steps.TUTORIAL, testType: json.test_type };
-            });
-            resolve();
-          }
-        );
+        socket.emit("end_instr", { session, participant_id: pid }, (res) => {
+          const json = JSON.parse(res);
+          update((s) => {
+            const newS = {
+              ...s,
+              step: steps.TUTORIAL,
+              testType: json.test_type,
+            };
+            console.log("instructionsComplete", newS);
+            return newS;
+          });
+          resolve();
+        });
       };
     },
     tutorialComplete: (session, pid, resolve, reject) => {
       return (socket, update) => {
         console.log("tutorial_complete", pid);
-        socket.emit(
-          "end_tutorial",
-          { session, participant_id: pid },
-          (res) => {
-            update((s) => {
-              return { ...s, step: steps.WAITING_ROOM };
-            });
-            resolve();
-          }
-        );
+        socket.emit("end_tutorial", { session, participant_id: pid }, (res) => {
+          update((s) => {
+            const newS = { ...s, step: steps.WAITING_ROOM };
+            console.log("tutorialComplete", newS);
+            return newS;
+          });
+          resolve();
+        });
       };
     },
     readyComplete: (session, pid, resolve, reject) => {
       return (socket, update) => {
         console.log("ready_complete", pid);
-        socket.emit(
-          "end_waiting",
-          { session, participant_id: pid },
-          (res) => {
-            update((s) => {
-              return { ...s, step: steps.WAITING_ROOM_READY_SUBMITTED };
-            });
-            resolve();
-          }
-        );
+        socket.emit("end_waiting", { session, participant_id: pid }, (res) => {
+          update((s) => {
+            const newS = { ...s, step: steps.WAITING_ROOM_READY_SUBMITTED };
+            console.log("readyComplete", newS);
+            return newS;
+          });
+          resolve();
+        });
       };
     },
     surveyTaskComplete: (session, pid, answers, resolve, reject) => {
@@ -143,7 +191,9 @@ export const studyStore = createDerivedSocketStore(
           { session, participant_id: pid, answers },
           (res) => {
             update((s) => {
-              return { ...s, step: steps.SURVEY_PITH };
+              const newS = { ...s, step: steps.SURVEY_PITH };
+              console.log("surveyTaskComplete", newS);
+              return newS;
             });
             resolve();
           }
@@ -159,9 +209,13 @@ export const studyStore = createDerivedSocketStore(
           (res) => {
             const json = JSON.parse(res);
             update((s) => {
-              return { 
-                ...s, step: steps.DONE, endRedirectURL: json.prolific_link 
+              const newS = {
+                ...s,
+                step: steps.DONE,
+                endRedirectURL: json.prolific_link,
               };
+              console.log("surveyPithComplete", newS);
+              return newS;
             });
             resolve();
           }
@@ -169,65 +223,86 @@ export const studyStore = createDerivedSocketStore(
       };
     },
     subscribeStudy: (session, pid) => {
+      console.log("subscribeStudy", pid);
       return (socket, update) => {
         socket.on("admin_initiate_ready", (res) => {
           console.log("readying...");
-            update((s) => {
-              const step = s.step;
-              if (step === steps.WAITING_ROOM) {
-                const json = JSON.parse(res);
-                return { 
-                  ...s, 
-                  step: steps.WAITING_ROOM_READY,
-                  readyEnd: json.ready_end 
-                };
-              }
-              else {
-                return { ...s };
-              }
-            });
+          update((s) => {
+            const step = s.step;
+            if (step === steps.WAITING_ROOM) {
+              const json = JSON.parse(res);
+              const newS = {
+                ...s,
+                step: steps.WAITING_ROOM_READY,
+                readyEnd: json.ready_end,
+                initTimer: false,
+              };
+              console.log("readying", newS);
+              return newS;
+            } else {
+              const newS = { ...s };
+              console.log("readying", newS);
+              return newS;
+            }
+          });
         });
         socket.on("admin_term_study", (res) => {
           console.log("terminating...");
           const json = JSON.parse(res);
           update((s) => {
-            return { 
-              ...s, 
+            const newS = {
+              ...s,
               step: steps.CANCEL,
-              cancelRedirectURL: json.cancel_link
+              cancelRedirectURL: json.cancel_link,
             };
+            console.log("terminating", newS);
+            return newS;
           });
         });
         socket.on("admin_start_disc", (res) => {
-          console.log("start");
+          console.log("starting...");
           const json = JSON.parse(res);
           update((s) => {
             const step = s.step;
             if (step === steps.WAITING_ROOM_READY_SUBMITTED) {
-              return { 
-                ...s, 
-                step: steps.DISCUSSION, 
+              const newS = {
+                ...s,
+                step: steps.DISCUSSION,
                 discussionURL: json.disc_link,
-                discEnd: json.disc_end
+                discEnd: json.disc_end,
+                initTimer: false,
               };
-            }
-            else { // not able to start in time
-              return {
+              console.log("starting", newS);
+              return newS;
+            } else {
+              // not able to start in time
+              const newS = {
                 ...s,
                 step: steps.CANCEL,
-            };
+              };
+              console.log("starting", newS);
+              return newS;
             }
           });
         });
         socket.on("admin_end_disc", (res) => {
-          console.log("end");
+          console.log("ending...");
+          const json = JSON.parse(res);
           update((s) => {
             const step = s.step;
             if (step === steps.DISCUSSION) {
-              return { ...s, step: steps.SURVEY_TASK };
-            }
-            else { // no change
-              return {...s};
+              const newS = {
+                ...s,
+                step: steps.SURVEY_TASK,
+                trueEndDisc: json.true_disc_end,
+              };
+              console.log("ending", newS);
+              return newS;
+            } else {
+              // no change
+              const newS = { ...s };
+              console.log("ending", newS);
+              return newS;
             }
           });
         });

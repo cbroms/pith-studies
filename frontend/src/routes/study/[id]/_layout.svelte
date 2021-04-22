@@ -17,26 +17,44 @@
   import Timer from "../../../components/Timer.svelte";
 
   import { studySocket as socket } from "../../../stores/socket.js";
+  import { getValue, setValue } from "../../../utils/localStorage";
   const { session } = stores();
   const { CONNECTION } = $session;
-
-  let stage = 0;
 
   // initialize study socket
   onMount(async () => {
     socket.initialize(CONNECTION, "Study");
+
+    const prevPid = getValue(`pid-${id}`);
+    console.log("prevPid", prevPid);
+    if (prevPid !== null) {
+      await studyStore.reload(id, prevPid);
+      studyStore.subscribeStudy(id, prevPid);
+    }
   });
 
   afterUpdate(() => {
-    if ($studyStore.step == steps.CONSENT && stage === 0) {
+    if (
+      $studyStore.timerEnd &&
+      !$studyStore.readyEnd &&
+      !$studyStore.initTimer
+    ) {
       timerStore.initialize($studyStore.timerEnd);
-      stage += 1;
-    } else if ($studyStore.step === steps.WAITING_ROOM_READY && stage === 1) {
+      studyStore.initTimer();
+    } else if (
+      $studyStore.readyEnd &&
+      !$studyStore.discEnd &&
+      !$studyStore.initTimer
+    ) {
       timerStore.initialize($studyStore.readyEnd);
-      stage += 1;
-    } else if ($studyStore.step == steps.DISCUSSION && stage === 2) {
+      studyStore.initTimer();
+    } else if (
+      $studyStore.discEnd &&
+      !$studyStore.trueEndDisc &&
+      !$studyStore.initTimer
+    ) {
       timerStore.initialize($studyStore.discEnd);
-      stage += 1;
+      studyStore.initTimer();
     }
 
     if ($studyStore.step === steps.CONSENT) {

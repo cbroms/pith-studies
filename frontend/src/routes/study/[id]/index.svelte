@@ -9,6 +9,7 @@
   import { onMount } from "svelte";
   import { goto } from "@sapper/app";
 
+  import { setValue } from "../../../utils/localStorage";
   import { studyStore } from "../../../stores/studyStore";
 
   export let id;
@@ -17,14 +18,13 @@
   let pressed = false;
 
   onMount(async () => {
-    await studyStore.checkSession(id, pid);
+    await studyStore.checkSession(id);
     console.log($studyStore.valid);
     if ($studyStore.valid) {
       const url = new URL(window.location.href);
       pid = url.searchParams.get("PROLIFIC_PID");
       studyStore.subscribeStudy(id, pid);
-    }
-    else {
+    } else {
       goto("/404");
     }
   });
@@ -32,14 +32,19 @@
   const onContinue = async () => {
     pressed = true;
     await studyStore.joinStudy(id, pid);
-    console.log("studyStore", $studyStore);
+
+    // local storage params
+    setValue(`pid-${id}`, pid);
   };
 </script>
 
 <div class="container-outer">
   <h1>Welcome!</h1>
 
-  <h3>Please enter your Prolific ID. Make sure it is entered correctly before pressing continue. </h3>
+  <h3>
+    Please enter your Prolific ID. Make sure it is entered correctly before
+    pressing continue.
+  </h3>
   <input bind:value={pid} />
 
   <button on:click={onContinue}>Continue</button>

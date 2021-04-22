@@ -69,15 +69,44 @@ class AdminNamespace(AsyncNamespace):
         params.insert_one({"session": session})
       return {}
 
-    async def on_admin_test_connect(self, sid, request):
+    async def on_admin_test_load(self, sid, request):
       session = request["session"]
-      logger.info("admin_test_connect({})".format(session))
+      logger.info("admin_test_load({})".format(session))
+
       is_in = sessions.find_one({"session": session})
-      valid = False
       if is_in:
         valid = True
+        sess_param = params.find_one({"session": session})
+        sess_participants = participants.find({"session": session})
+        participants_map = {p["participant_id"]:p["stage"] for p in sess_participants}
+        participantList = list(participants_map.keys())
+        result = {
+            "valid": valid,
+            "test_type": sess_param["test_type"] if "test_type" in sess_param else None,
+            "disc_link": sess_param["disc_link"] if "disc_link" in sess_param else None,
+            "prolific_link": sess_param["prolific_link"] if "prolific_link" in sess_param else None,
+            "cancel_link": sess_param["cancel_link"] if "cancel_link" in sess_param else None,
+            "timer_end": sess_param["timer_end"] if "timer_end" in sess_param else None,
+            "timer_start": sess_param["timer_start"] if "timer_start" in sess_param else None,
+            "ready_end": sess_param["ready_end"] if "ready_end" in sess_param else None,
+            "ready_start": sess_param["ready_start"] if "ready_start" in sess_param else None,
+            "disc_end": sess_param["disc_end"] if "disc_end" in sess_param else None,
+            "disc_start": sess_param["disc_start"] if "disc_start" in sess_param else None,
+            "end_disc": sess_param["end_disc"] if "end_disc" in sess_param else None,
+            "term": sess_param["term"] if "term" in sess_param else None,
+            "finish": sess_param["finish"] if "finish" in sess_param else None,
+            "participants": participants_map,
+            "participantList": participantList
+            }
+        # debugging
+        sess_par = participants.find({"session": session})
+        sids = [(p["participant_id"], p["sid"][-1]) for p in sess_par]
+        for p, s in sids:
+            logger.info("({}, {}) => {}".format(p, s, self.rooms(s, namespace=STUDY_NS)))
+      else:
+        valid = False
+        result = {"valid": valid}
       self.enter_room(sid, ADMIN_ROOM)
-      result = {"valid": valid}
       result = dumps(result, cls=JSONEncoder)
       return result
 
@@ -86,6 +115,7 @@ class AdminNamespace(AsyncNamespace):
       session = request["session"]
       test_type = request["test_type"]
       logger.info("admin_set_test_type({}, {})".format(session, test_type))
+
       params.update_one({"session": session}, {"$set": {"test_type": test_type}})
       result = {"test_type": test_type}
       result = dumps(result, cls=JSONEncoder)
@@ -96,6 +126,7 @@ class AdminNamespace(AsyncNamespace):
       session = request["session"]
       disc_link = request["disc_link"]
       logger.info("admin_set_disc_link({}, {})".format(session, disc_link))
+
       params.update_one({"session": session}, {"$set": {"disc_link": disc_link}})
       result = {"disc_link": disc_link}
       result = dumps(result, cls=JSONEncoder)
@@ -124,6 +155,12 @@ class AdminNamespace(AsyncNamespace):
     async def on_admin_initiate_ready(self, sid, request):
       session = request["session"]
       logger.info("admin_initiate_ready({})".format(session))
+
+      sess_par = participants.find({"session": session})
+      sids = [(p["participant_id"], p["sid"][-1]) for p in sess_par]
+      for p, s in sids:
+        logger.info("({}, {}) => {}".format(p, s, self.rooms(s, namespace=STUDY_NS)))
+
       ready_start = get_time()
       ready_end = ready_start + datetime.timedelta(minutes=1)
       ready_start = form_time(ready_start)
@@ -143,7 +180,6 @@ class AdminNamespace(AsyncNamespace):
             "$set": {"stage": stages.WAITING_ROOM_READY},
           })
 
-
       result = {"ready_end": ready_end}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
@@ -156,6 +192,12 @@ class AdminNamespace(AsyncNamespace):
     async def on_admin_term_study(self, sid, request):
       session = request["session"]
       logger.info("admin_term_study({})".format(session))
+
+      sess_par = participants.find({"session": session})
+      sids = [(p["participant_id"], p["sid"][-1]) for p in sess_par]
+      for p, s in sids:
+        logger.info("({}, {}) => {}".format(p, s, self.rooms(s, namespace=STUDY_NS)))
+
       params.update_one({"session": session}, {"$set": {"term": True}})
       sess_params = params.find_one({"session": session})
       result = {"cancel_link": sess_params["cancel_link"]}
@@ -167,6 +209,12 @@ class AdminNamespace(AsyncNamespace):
     async def on_admin_start_disc(self, sid, request):
       session = request["session"]
       logger.info("admin_start_disc({})".format(session))
+
+      sess_par = participants.find({"session": session})
+      sids = [(p["participant_id"], p["sid"][-1]) for p in sess_par]
+      for p, s in sids:
+        logger.info("({}, {}) => {}".format(p, s, self.rooms(s, namespace=STUDY_NS)))
+
       disc_start = get_time()
       disc_end = disc_start + datetime.timedelta(minutes=15)
       disc_start = form_time(disc_start)
@@ -198,6 +246,12 @@ class AdminNamespace(AsyncNamespace):
     async def on_admin_end_disc(self, sid, request):
       session = request["session"]
       logger.info("admin_end_disc({})".format(session))
+
+      sess_par = participants.find({"session": session})
+      sids = [(p["participant_id"], p["sid"][-1]) for p in sess_par]
+      for p, s in sids:
+        logger.info("({}, {}) => {}".format(p, s, self.rooms(s, namespace=STUDY_NS)))
+
       true_disc_end = form_time(get_time())
 
       params.update_one({"session": session}, {"$set": {"end_disc": true_disc_end}})
@@ -211,7 +265,7 @@ class AdminNamespace(AsyncNamespace):
             "$set": {"stage": stages.SURVEY_TASK},
           })
 
-      result = {}
+      result = {"true_disc_end": true_disc_end}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "admin_end_disc", result, namespace=STUDY_NS, room=TESTER_ROOM
@@ -223,6 +277,12 @@ class AdminNamespace(AsyncNamespace):
     async def on_admin_study_teardown(self, sid, request):
       session = request["session"]
       logger.info("admin_study_teardown({})".format(session))
+
+      sess_par = participants.find({"session": session})
+      sids = [(p["participant_id"], p["sid"][-1]) for p in sess_par]
+      for p, s in sids:
+        logger.info("({}, {}) => {}".format(p, s, self.rooms(s, namespace=STUDY_NS)))
+
       params.update_one({"session": session}, {"$set": {"finish": True}})
       self.close_room(TESTER_ROOM, namespace=STUDY_NS)
       self.leave_room(sid, ADMIN_ROOM)
@@ -235,14 +295,13 @@ class StudyNamespace(AsyncNamespace):
 
     async def on_test_connect(self, sid, request):
       session = request["session"]
-      participant_id = request["participant_id"]
-      logger.info("test_connect({}, {})".format(session, participant_id))
+      logger.info("test_connect({}) [{}]".format(session, sid))
       is_in = sessions.find_one({"session": session})
       valid = False
       if is_in:
         valid = True
 
-      result = {"participant_id": participant_id}
+      result = {}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "test_connect", result, namespace=ADMIN_NS, room=ADMIN_ROOM
@@ -255,14 +314,16 @@ class StudyNamespace(AsyncNamespace):
     async def on_join_study(self, sid, request):
       session = request["session"]
       participant_id = request["participant_id"]
-      logger.info("join_study({}, {})".format(session, participant_id))
+      logger.info("join_study({}, {}) [{}]".format(session, participant_id, sid))
 
       participants.insert_one({
         "session": session, 
         "participant_id": participant_id,
         "stage": stages.CONSENT,
+        "sid": [sid],
       })
       self.enter_room(sid, TESTER_ROOM)
+      logger.info("join ({}, [{}]) => {}".format(participant_id, sid, self.rooms(sid)))
 
       sess_params = params.find_one({"session": session})
       if not "timer_start" in sess_params:
@@ -301,14 +362,42 @@ class StudyNamespace(AsyncNamespace):
       result = dumps(result, cls=JSONEncoder)
       return result
 
+    async def on_reload_study(self, sid, request):
+      session = request["session"]
+      participant_id = request["participant_id"]
+      logger.info("reload_study({}, {}) [{}]".format(session, participant_id, sid))
+
+      participants.update_one({"participant_id": participant_id}, {"$push": {"sid": sid}})
+      self.enter_room(sid, TESTER_ROOM)
+      logger.info("reload ({}, [{}]) => {}".format(participant_id, sid, self.rooms(sid)))
+
+      participant = participants.find_one({"session": session, "participant_id": participant_id})
+      sess_param = params.find_one({"session": session})
+      stage = participant["stage"]
+
+      result = {
+        "stage": stage, 
+        "test_type": sess_param["test_type"] if "test_type" in sess_param else None,
+        "disc_link": sess_param["disc_link"] if "disc_link" in sess_param else None,
+        "prolific_link": sess_param["prolific_link"] if "prolific_link" in sess_param else None,
+        "cancel_link": sess_param["cancel_link"] if "cancel_link" in sess_param else None,
+        "timer_end": sess_param["timer_end"] if "timer_end" in sess_param else None,
+        "ready_end": sess_param["ready_end"] if "ready_end" in sess_param else None,
+        "disc_end": sess_param["disc_end"] if "disc_end" in sess_param else None,
+        "end_disc": sess_param["end_disc"] if "end_disc" in sess_param else None
+      }
+      result = dumps(result, cls=JSONEncoder)
+      return result
+
+
     async def on_end_consent(self, sid, request):
       session = request["session"]
       participant_id = request["participant_id"]
       response1 = request["response1"]
       response2 = request["response2"]
       response3 = request["response3"]
-      logger.info("end_consent({}, {}, {}, {}, {})".format(
-        session, participant_id, response1, response2, response3
+      logger.info("end_consent({}, {}, {}, {}, {}) [{}]".format(
+        session, participant_id, response1, response2, response3, sid
       ))
       accepted = response1 and response2 and response3
       if accepted:
@@ -338,6 +427,7 @@ class StudyNamespace(AsyncNamespace):
     async def on_end_instr(self, sid, request):
       session = request["session"]
       participant_id = request["participant_id"]
+      logger.info("end_instr({}, {}) [{}]".format(session, participant_id, sid))
 
       participants.update_one({
         "session": session, 
@@ -346,7 +436,6 @@ class StudyNamespace(AsyncNamespace):
         "$set": {"stage": stages.TUTORIAL},
       })
 
-      logger.info("end_instr({}, {})".format(session, participant_id))
       result = {"participant_id": participant_id}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
@@ -360,7 +449,7 @@ class StudyNamespace(AsyncNamespace):
     async def on_end_tutorial(self, sid, request):
       session = request["session"]
       participant_id = request["participant_id"]
-      logger.info("end_tutorial({}, {})".format(session, participant_id))
+      logger.info("end_tutorial({}, {}) [{}]".format(session, participant_id, sid))
 
       participants.update_one({
         "session": session, 
@@ -387,7 +476,7 @@ class StudyNamespace(AsyncNamespace):
         "$set": {"stage": stages.WAITING_ROOM_READY_SUBMITTED},
       })
 
-      logger.info("end_waiting({}, {})".format(session, participant_id))
+      logger.info("end_waiting({}, {}) [{}]".format(session, participant_id, sid))
       result = {"participant_id": participant_id}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
@@ -399,7 +488,7 @@ class StudyNamespace(AsyncNamespace):
       session = request["session"]
       participant_id = request["participant_id"]
       answers = request["answers"]
-      logger.info("end_survey_task({}, {}, {})".format(session, participant_id, answers))
+      logger.info("end_survey_task({}, {}, {}) [{}]".format(session, participant_id, answers, sid))
 
       participants.update_one({
         "session": session, 
@@ -422,7 +511,7 @@ class StudyNamespace(AsyncNamespace):
       session = request["session"]
       participant_id = request["participant_id"]
       answers = request["answers"]
-      logger.info("end_survey_pith({}, {}, {})".format(session, participant_id, answers))
+      logger.info("end_survey_pith({}, {}, {}) [{}]".format(session, participant_id, answers, sid))
 
       participants.update_one({
         "session": session, 

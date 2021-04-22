@@ -8,10 +8,9 @@
   import Timer from "../../components/Timer.svelte";
 
   import { adminSocket as socket } from "../../stores/socket";
+  import { getValue, setValue } from "../../utils/localStorage";
   const { session } = stores();
   const { CONNECTION } = $session;
-
-  let stage = 0;
 
   // initialize study socket
   onMount(async () => {
@@ -19,20 +18,27 @@
   });
 
   afterUpdate(() => {
-    if ($adminStore.sid && stage === 0) {
-      goto(`/admin/${$adminStore.sid}`);
-    }
-    if ($adminStore.timerEnd && stage == 0) {
+    if (
+      $adminStore.timerEnd &&
+      !$adminStore.readyEnd &&
+      !$adminStore.initTimer
+    ) {
       timerStore.initialize($adminStore.timerEnd);
-      stage += 1;
-    }
-    else if ($adminStore.readyEnd && stage === 1) {
+      adminStore.initTimer();
+    } else if (
+      $adminStore.readyEnd &&
+      !$adminStore.discEnd &&
+      !$adminStore.initTimer
+    ) {
       timerStore.initialize($adminStore.readyEnd);
-      stage += 1;
-    }
-    else if ($adminStore.discEnd && stage === 2) {
+      adminStore.initTimer();
+    } else if (
+      $adminStore.discEnd &&
+      !$adminStore.trueEndDisc &&
+      !$adminStore.initTimer
+    ) {
       timerStore.initialize($adminStore.discEnd);
-      stage += 1;
+      adminStore.initTimer();
     }
   });
 </script>

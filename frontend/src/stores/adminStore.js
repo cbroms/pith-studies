@@ -23,6 +23,7 @@ const defaultState = {
   participantList: [],
   finish: false,
   term: false,
+  initTimer: false,
 };
 
 export const adminStore = createDerivedSocketStore(
@@ -33,6 +34,7 @@ export const adminStore = createDerivedSocketStore(
       return (socket, update) => {
         console.log("create_study", socket);
         socket.emit("admin_study_setup", { session }, (res) => {
+          console.log("created_study");
           // this should always work
           update((s) => {
             return { ...s, session: session };
@@ -41,16 +43,58 @@ export const adminStore = createDerivedSocketStore(
         });
       };
     },
-    checkSession: (session, resolve, reject) => {
+    loadSession: (session, resolve, reject) => {
       return (socket, update) => {
-        socket.emit("admin_test_connect", { session }, (res) => {
+        socket.emit("admin_test_load", { session }, (res) => {
           const json = JSON.parse(res);
           console.log("valid", json.valid);
-          update((s) => {
-            return { ...s, valid: json.valid, isAdmin: true };
-          });
+          if (json.valid) {
+            update((s) => {
+              return {
+                ...s,
+                valid: json.valid,
+                session: session,
+                isAdmin: true,
+                testType: json.test_type,
+                discLink: json.disc_link,
+                completionLink: json.prolific_link,
+                cancelLink: json.cancel_link,
+                timerEnd: json.timer_end,
+                timerStart: json.timer_start,
+                readyEnd: json.ready_end,
+                readyStart: json.ready_start,
+                discEnd: json.disc_end,
+                discStart: json.disc_start,
+                trueEndDisc: json.end_disc,
+                term: json.term,
+                finish: json.finish,
+                participants: json.participants,
+                participantList: json.participantList,
+                initTimer: false,
+              };
+            });
+          } else {
+            update((s) => {
+              return {
+                ...s,
+                valid: json.valid,
+                isAdmin: true,
+              };
+            });
+          }
           resolve();
         });
+      };
+    },
+    initTimer: (resolve, reject) => {
+      return (socket, update) => {
+        update((s) => {
+          return {
+            ...s,
+            initTimer: true,
+          };
+        });
+        resolve();
       };
     },
     setTestType: (session, testType, resolve, reject) => {
@@ -131,6 +175,7 @@ export const adminStore = createDerivedSocketStore(
               readyStart: json.ready_start,
               readyEnd: json.ready_end,
               participants: participants,
+              initTimer: false,
             };
           });
           resolve();
@@ -169,6 +214,7 @@ export const adminStore = createDerivedSocketStore(
               discStart: json.disc_start,
               discEnd: json.disc_end,
               participants: participants,
+              initTimer: false,
             };
           });
           resolve();
@@ -240,6 +286,7 @@ export const adminStore = createDerivedSocketStore(
                 timerEnd: json.timer_end,
                 participantList: participantList,
                 participants: participants,
+                initTimer: false,
               };
             } else {
               return {

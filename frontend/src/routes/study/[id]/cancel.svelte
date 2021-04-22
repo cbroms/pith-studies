@@ -11,13 +11,17 @@
 
 <div class="container-outer">
   <h1>Your session has been terminated.</h1>
-  <h2>Either you were not able to join the discussion in time
-    or not enough people were available to start the discussion. 
-      Please click on the button to end your session.</h2>
+  <h2>
+    Either you were not able to join the discussion in time or not enough people
+    were available to start the discussion. Please return your session on
+    Prolific.
+  </h2>
 
+  <!--
   <div class="container-outer">
       <button on:click={onRedirect}>Go to Prolific Home</button>
   </div>
+  -->
 </div>
 
 <style>

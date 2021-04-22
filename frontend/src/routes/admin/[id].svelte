@@ -23,11 +23,10 @@
   let testType = null;
 
   onMount(async () => {
-    await adminStore.checkSession(id);
+    await adminStore.loadSession(id);
     if ($adminStore.valid) {
       adminStore.subscribeProgress(id);
-    }
-    else {
+    } else {
       goto("/404");
     }
   });
@@ -46,20 +45,19 @@
   };
   const onReadyDisc = async () => {
     await adminStore.readyDisc(id);
-  }
+  };
   const onStartDisc = async () => {
     await adminStore.startDisc(id);
-  }
+  };
   const onEndDisc = async () => {
     await adminStore.endDisc(id);
-  }
+  };
   const onTermStudy = async () => {
     await adminStore.termStudy(id);
-  }
+  };
   const onFinishStudy = async () => {
     await adminStore.teardownStudy(id);
-  }
-
+  };
 </script>
 
 <div class="admin-panel">
@@ -74,20 +72,38 @@
       <div class="param_settings">
         <div class="param">
           <h5>Test Type (Tutorial): {$adminStore.testType}</h5>
-            <label class="option">1<input type="radio" bind:group={testType} value={1} /></label>
-            <label class="option">2<input type="radio" bind:group={testType} value={2} /></label>
-            <label class="option">3<input type="radio" bind:group={testType} value={3} /></label>
+          <label class="option"
+            >1<input type="radio" bind:group={testType} value={1} /></label
+          >
+          <label class="option"
+            >2<input type="radio" bind:group={testType} value={2} /></label
+          >
+          <label class="option"
+            >3<input type="radio" bind:group={testType} value={3} /></label
+          >
           <button on:click={onTestType}>Submit</button>
         </div>
 
         <div class="param">
-          <h5>Pith Discussion Link (Discussion): <a href={$adminStore.discLink}>{$adminStore.discLink === null}</a></h5>
+          <h5>
+            Pith Discussion Link (Discussion): <a href={$adminStore.discLink}
+              >{$adminStore.discLink === null}</a
+            >
+          </h5>
           <input bind:value={discLink} />
           <button on:click={onDiscLink}>Submit</button>
-          <h5>Completion Link (Complete): <a href={$adminStore.completionLink}>{$adminStore.completionLink === null}</a></h5>
+          <h5>
+            Completion Link (Complete): <a href={$adminStore.completionLink}
+              >{$adminStore.completionLink === null}</a
+            >
+          </h5>
           <input bind:value={completionLink} />
           <button on:click={onCompletionLink}>Submit</button>
-          <h5>Cancel Link (Cancel, Discussion): <a href={$adminStore.cancelLink}>{$adminStore.cancelLink === null}</a></h5>
+          <h5>
+            Cancel Link (Cancel, Discussion): <a href={$adminStore.cancelLink}
+              >{$adminStore.cancelLink === null}</a
+            >
+          </h5>
           <input bind:value={cancelLink} />
           <button on:click={onCancelLink}>Submit</button>
         </div>
@@ -153,11 +169,11 @@
           <div class="column-inner">
             <h5>Start</h5>
             <ul>
-                {#each $adminStore.participantList as pid (pid)}
-                  {#if $adminStore.participants.pid === steps.WELCOME}
-                    <li>{pid}</li>
-                  {/if}
-                {/each}
+              {#each $adminStore.participantList as pid (pid)}
+                {#if $adminStore.participants.pid === steps.WELCOME}
+                  <li>{pid}</li>
+                {/if}
+              {/each}
             </ul>
           </div>
         </div>
@@ -165,11 +181,11 @@
           <div class="column-inner">
             <h5>Consent</h5>
             <ul>
-                {#each $adminStore.participantList as pid (pid)}
-                  {#if $adminStore.participants[pid] === steps.CONSENT}
-                    <li>{pid}</li>
-                  {/if}
-                {/each}
+              {#each $adminStore.participantList as pid (pid)}
+                {#if $adminStore.participants[pid] === steps.CONSENT}
+                  <li>{pid}</li>
+                {/if}
+              {/each}
             </ul>
           </div>
         </div>
@@ -177,11 +193,11 @@
           <div class="column-inner">
             <h5>Instructions</h5>
             <ul>
-                {#each $adminStore.participantList as pid (pid)}
-                  {#if $adminStore.participants[pid] === steps.INSTRUCTIONS}
-                    <li>{pid}</li>
-                  {/if}
-                {/each}
+              {#each $adminStore.participantList as pid (pid)}
+                {#if $adminStore.participants[pid] === steps.INSTRUCTIONS}
+                  <li>{pid}</li>
+                {/if}
+              {/each}
             </ul>
           </div>
         </div>
@@ -189,11 +205,11 @@
           <div class="column-inner">
             <h5>Tutorial</h5>
             <ul>
-                {#each $adminStore.participantList as pid (pid)}
-                  {#if $adminStore.participants[pid] === steps.TUTORIAL}
-                    <li>{pid}</li>
-                  {/if}
-                {/each}
+              {#each $adminStore.participantList as pid (pid)}
+                {#if $adminStore.participants[pid] === steps.TUTORIAL}
+                  <li>{pid}</li>
+                {/if}
+              {/each}
             </ul>
           </div>
         </div>
@@ -201,11 +217,11 @@
           <div class="column-inner">
             <h5>Waiting</h5>
             <ul>
-                {#each $adminStore.participantList as pid (pid)}
-                  {#if $adminStore.participants[pid] === steps.WAITING_ROOM}
-                    <li>{pid}</li>
-                  {/if}
-                {/each}
+              {#each $adminStore.participantList as pid (pid)}
+                {#if $adminStore.participants[pid] === steps.WAITING_ROOM}
+                  <li>{pid}</li>
+                {/if}
+              {/each}
             </ul>
           </div>
         </div>
@@ -213,11 +229,11 @@
           <div class="column-inner">
             <h5>Ready Out</h5>
             <ul>
-                {#each $adminStore.participantList as pid (pid)}
-                  {#if $adminStore.participants[pid] === steps.WAITING_ROOM_READY}
-                    <li>{pid}</li>
-                  {/if}
-                {/each}
+              {#each $adminStore.participantList as pid (pid)}
+                {#if $adminStore.participants[pid] === steps.WAITING_ROOM_READY}
+                  <li>{pid}</li>
+                {/if}
+              {/each}
             </ul>
           </div>
         </div>
@@ -225,11 +241,11 @@
           <div class="column-inner">
             <h5>Ready In</h5>
             <ul>
-                {#each $adminStore.participantList as pid (pid)}
-                  {#if $adminStore.participants[pid] === steps.WAITING_ROOM_READY_SUBMITTED}
-                    <li>{pid}</li>
-                  {/if}
-                {/each}
+              {#each $adminStore.participantList as pid (pid)}
+                {#if $adminStore.participants[pid] === steps.WAITING_ROOM_READY_SUBMITTED}
+                  <li>{pid}</li>
+                {/if}
+              {/each}
             </ul>
           </div>
         </div>
@@ -237,11 +253,11 @@
           <div class="column-inner">
             <h5>Discussion</h5>
             <ul>
-                {#each $adminStore.participantList as pid (pid)}
-                  {#if $adminStore.participants[pid] === steps.DISCUSSION}
-                    <li>{pid}</li>
-                  {/if}
-                {/each}
+              {#each $adminStore.participantList as pid (pid)}
+                {#if $adminStore.participants[pid] === steps.DISCUSSION}
+                  <li>{pid}</li>
+                {/if}
+              {/each}
             </ul>
           </div>
         </div>
@@ -249,11 +265,11 @@
           <div class="column-inner">
             <h5>Survey: Task</h5>
             <ul>
-                {#each $adminStore.participantList as pid (pid)}
-                  {#if $adminStore.participants[pid] === steps.SURVEY_TASK}
-                    <li>{pid}</li>
-                  {/if}
-                {/each}
+              {#each $adminStore.participantList as pid (pid)}
+                {#if $adminStore.participants[pid] === steps.SURVEY_TASK}
+                  <li>{pid}</li>
+                {/if}
+              {/each}
             </ul>
           </div>
         </div>
@@ -261,11 +277,11 @@
           <div class="column-inner">
             <h5>Survey: Pith</h5>
             <ul>
-                {#each $adminStore.participantList as pid (pid)}
-                  {#if $adminStore.participants[pid] === steps.SURVEY_PITH}
-                    <li>{pid}</li>
-                  {/if}
-                {/each}
+              {#each $adminStore.participantList as pid (pid)}
+                {#if $adminStore.participants[pid] === steps.SURVEY_PITH}
+                  <li>{pid}</li>
+                {/if}
+              {/each}
             </ul>
           </div>
         </div>
@@ -273,15 +289,14 @@
           <div class="column-inner">
             <h5>Complete</h5>
             <ul>
-                {#each $adminStore.participantList as pid (pid)}
-                  {#if $adminStore.participants[pid] === steps.DONE}
-                    <li>{pid}</li>
-                  {/if}
-                {/each}
+              {#each $adminStore.participantList as pid (pid)}
+                {#if $adminStore.participants[pid] === steps.DONE}
+                  <li>{pid}</li>
+                {/if}
+              {/each}
             </ul>
           </div>
         </div>
-
       </div>
     </div>
   </div>
