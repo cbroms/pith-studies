@@ -7,7 +7,7 @@
   import ModalContent from "./ModalContent.svelte";
 </script>
 
-{#if $adminStore.isAdmin && $timerStore && $adminStore.trueEndDisc === null}
+{#if $adminStore.isAdmin && $timerStore && $adminStore.trueEndDisc === null && $studyStore.step !== steps.CANCEL}
   <div class="timer" class:flash={$timerStore.warning}>
     {#if $adminStore.readyEnd === null}
       {#if $timerStore.remaining === "00:00"}
