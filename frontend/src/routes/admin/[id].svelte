@@ -99,6 +99,7 @@
           </h5>
           <input bind:value={completionLink} />
           <button on:click={onCompletionLink}>Submit</button>
+          <!--
           <h5>
             Cancel Link (Cancel, Discussion): <a href={$adminStore.cancelLink}
               >{$adminStore.cancelLink === null}</a
@@ -106,6 +107,7 @@
           </h5>
           <input bind:value={cancelLink} />
           <button on:click={onCancelLink}>Submit</button>
+          -->
         </div>
       </div>
 
@@ -167,10 +169,10 @@
       <div class="progress">
         <div class="column" style="margin-left: -2px">
           <div class="column-inner">
-            <h5>Start</h5>
+            <h5>Cancel</h5>
             <ul>
               {#each $adminStore.participantList as pid (pid)}
-                {#if $adminStore.participants.pid === steps.WELCOME}
+                {#if $adminStore.participants[pid] === steps.CANCEL}
                   <li>{pid}</li>
                 {/if}
               {/each}

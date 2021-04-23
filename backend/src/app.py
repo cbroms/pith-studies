@@ -198,6 +198,15 @@ class AdminNamespace(AsyncNamespace):
       for p, s in sids:
         logger.info("({}, {}) => {}".format(p, s, self.rooms(s, namespace=STUDY_NS)))
 
+      # save cancel stage
+      for p in sess_par:
+        participants.update_one({
+          "session": session, 
+          "participant_id": p["participant_id"]
+        }, {
+          "$set": {"stage": stages.CANCEL},
+        })
+
       params.update_one({"session": session}, {"$set": {"term": True}})
       sess_params = params.find_one({"session": session})
       result = {"cancel_link": sess_params["cancel_link"]}
@@ -231,6 +240,13 @@ class AdminNamespace(AsyncNamespace):
             "participant_id": p["participant_id"]
           }, {
             "$set": {"stage": stages.DISCUSSION},
+          })
+        else: # terminate
+          participants.update_one({
+            "session": session, 
+            "participant_id": p["participant_id"]
+          }, {
+            "$set": {"stage": stages.CANCEL},
           })
 
       sess_params = params.find_one({"session": session})

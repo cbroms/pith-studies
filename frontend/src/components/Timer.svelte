@@ -7,50 +7,52 @@
   import ModalContent from "./ModalContent.svelte";
 </script>
 
-{#if $adminStore.isAdmin && $timerStore && $adminStore.trueEndDisc === null}
+{#if $adminStore.isAdmin && $timerStore 
+  && $adminStore.trueEndDisc === null && $adminStore.term === false}
   <div class="timer" class:flash={$timerStore.warning}>
-    {#if $adminStore.readyEnd === null}
-      {#if $timerStore.remaining === "00:00"}
-        Main study starting soon...
-      {:else}
-        Main study starts in <strong>{$timerStore.remaining}</strong>
-      {/if}
-    {:else if $adminStore.discEnd === null}
-      {#if $timerStore.remaining === "00:00"}
-        Discussion starting soon...
-      {:else}
-        Discussion starts in <strong>{$timerStore.remaining}</strong>
-      {/if}
-    {:else if $adminStore.trueEndDisc === null}
+    {#if $adminStore.discEnd !== null}
       {#if $timerStore.remaining === "00:00"}
         Discussion ending soon...
       {:else}
         Discussion ends in <strong>{$timerStore.remaining}</strong>
       {/if}
+    {:else if $adminStore.readyEnd !== null}
+      {#if $timerStore.remaining === "00:00"}
+        Discussion starting soon...
+      {:else}
+        Discussion starts in <strong>{$timerStore.remaining}</strong>
+      {/if}
+    {:else if $adminStore.timerEnd !== null}
+      {#if $timerStore.remaining === "00:00"}
+        Main study starting soon...
+      {:else}
+        Main study starts in <strong>{$timerStore.remaining}</strong>
+      {/if}
     {/if}
   </div>
 {/if}
 
-{#if $studyStore.isParticipant && $timerStore && $studyStore.trueEndDisc === null}
+{#if $studyStore.isParticipant && $timerStore 
+  && $studyStore.trueEndDisc === null} 
   <div class="timer" class:flash={$timerStore.warning}>
     <div>
-      {#if $studyStore.readyEnd === null}
+      {#if $studyStore.discEnd !== null}
         {#if $timerStore.remaining === "00:00"}
-          Main study starting soon...
+          Discussion ending soon...
         {:else}
-          Main study starts in <strong>{$timerStore.remaining}</strong>
+          Discussion ends in <strong>{$timerStore.remaining}</strong>
         {/if}
-      {:else if $studyStore.discEnd === null}
+      {:else if $studyStore.readyEnd !== null}
         {#if $timerStore.remaining === "00:00"}
           Discussion starting soon...
         {:else}
           Discussion starts in <strong>{$timerStore.remaining}</strong>
         {/if}
-      {:else if $studyStore.trueEndDisc === null}
+      {:else if $studyStore.timerEnd !== null}
         {#if $timerStore.remaining === "00:00"}
-          Discussion ending soon...
+          Main study starting soon...
         {:else}
-          Discussion ends in <strong>{$timerStore.remaining}</strong>
+          Main study starts in <strong>{$timerStore.remaining}</strong>
         {/if}
       {/if}
     </div>

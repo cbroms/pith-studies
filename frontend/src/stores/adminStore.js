@@ -187,9 +187,14 @@ export const adminStore = createDerivedSocketStore(
       return (socket, update) => {
         socket.emit("admin_term_study", { session }, (res) => {
           update((s) => {
+            let participants = {...s.participants};
+            for (const pid in participants) {
+              participants[pid] = steps.CANCEL;
+            }
             return {
               ...s,
               term: true,
+              participants: participants,
             };
           });
           resolve();
@@ -207,6 +212,9 @@ export const adminStore = createDerivedSocketStore(
             for (const pid in participants) {
               if (participants[pid] === steps.WAITING_ROOM_READY_SUBMITTED) {
                 participants[pid] = steps.DISCUSSION;
+              }
+              else {
+                participants[pid] = steps.CANCEL;
               }
             }
             return {
