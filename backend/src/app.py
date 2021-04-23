@@ -216,7 +216,7 @@ class AdminNamespace(AsyncNamespace):
 
       params.update_one({"session": session}, {"$set": {"term": True}})
       sess_params = params.find_one({"session": session})
-      result = {"cancel_link": sess_params["cancel_link"]}
+      result = {"cancel_link": ""} #sess_params["cancel_link"]}
       result = dumps(result, cls=JSONEncoder)
       await self.emit(
         "admin_term_study", result, namespace=STUDY_NS, room=TESTER_ROOM
