@@ -227,6 +227,7 @@ export const studyStore = createDerivedSocketStore(
       return (socket, update) => {
         socket.on("admin_initiate_ready", (res) => {
           console.log("readying...");
+          // if they're in the waiting room, give them the ready step
           update((s) => {
             const step = s.step;
             if (step === steps.WAITING_ROOM) {
@@ -240,8 +241,12 @@ export const studyStore = createDerivedSocketStore(
               console.log("readying", newS);
               return newS;
             } else {
-              const newS = { ...s };
-              console.log("readying", newS);
+              // if they're not in the waiting room, terminate them
+              const newS = {
+                ...s,
+                step: steps.CANCEL,
+              };
+              console.log("terminating", newS);
               return newS;
             }
           });
@@ -253,7 +258,6 @@ export const studyStore = createDerivedSocketStore(
             const newS = {
               ...s,
               step: steps.CANCEL,
-              cancelRedirectURL: json.cancel_link,
             };
             console.log("terminating", newS);
             return newS;
