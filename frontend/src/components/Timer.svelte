@@ -8,21 +8,21 @@
 </script>
 
 {#if $adminStore.isAdmin && $timerStore 
-  && $adminStore.trueEndDisc === null && $adminStore.term === false}
+  && !$adminStore.trueEndDisc && !$adminStore.term}
   <div class="timer" class:flash={$timerStore.warning}>
-    {#if $adminStore.discEnd !== null}
+    {#if $adminStore.discEnd}
       {#if $timerStore.remaining === "00:00"}
         Discussion ending soon...
       {:else}
         Discussion ends in <strong>{$timerStore.remaining}</strong>
       {/if}
-    {:else if $adminStore.readyEnd !== null}
+    {:else if $adminStore.readyEnd}
       {#if $timerStore.remaining === "00:00"}
         Discussion starting soon...
       {:else}
         Discussion starts in <strong>{$timerStore.remaining}</strong>
       {/if}
-    {:else if $adminStore.timerEnd !== null}
+    {:else if $adminStore.timerEnd}
       {#if $timerStore.remaining === "00:00"}
         Main study starting soon...
       {:else}
@@ -33,22 +33,22 @@
 {/if}
 
 {#if $studyStore.isParticipant && $timerStore 
-  && $studyStore.trueEndDisc === null && $studyStore.step !== steps.CANCEL} 
+  && !$studyStore.trueEndDisc && $studyStore.step !== steps.CANCEL} 
   <div class="timer" class:flash={$timerStore.warning}>
     <div>
-      {#if $studyStore.discEnd !== null}
+      {#if $studyStore.discEnd}
         {#if $timerStore.remaining === "00:00"}
           Discussion ending soon...
         {:else}
           Discussion ends in <strong>{$timerStore.remaining}</strong>
         {/if}
-      {:else if $studyStore.readyEnd !== null}
+      {:else if $studyStore.readyEnd}
         {#if $timerStore.remaining === "00:00"}
           Discussion starting soon...
         {:else}
           Discussion starts in <strong>{$timerStore.remaining}</strong>
         {/if}
-      {:else if $studyStore.timerEnd !== null}
+      {:else if $studyStore.timerEnd}
         {#if $timerStore.remaining === "00:00"}
           Main study starting soon...
         {:else}
