@@ -33,7 +33,7 @@
 {/if}
 
 {#if $studyStore.isParticipant && $timerStore 
-  && $studyStore.trueEndDisc === null} 
+  && $studyStore.trueEndDisc === null && $studyStore.step !== steps.CANCEL} 
   <div class="timer" class:flash={$timerStore.warning}>
     <div>
       {#if $studyStore.discEnd !== null}

@@ -169,6 +169,9 @@ export const adminStore = createDerivedSocketStore(
               if (participants[pid] === steps.WAITING_ROOM) {
                 participants[pid] = steps.WAITING_ROOM_READY;
               }
+              else {
+                participants[pid] = steps.CANCEL;
+              }
             }
             return {
               ...s,

@@ -179,6 +179,13 @@ class AdminNamespace(AsyncNamespace):
           }, {
             "$set": {"stage": stages.WAITING_ROOM_READY},
           })
+        else:
+          participants.update_one({
+            "session": session, 
+            "participant_id": p["participant_id"]
+          }, {
+            "$set": {"stage": stages.CANCEL},
+          })
 
       result = {"ready_end": ready_end}
       result = dumps(result, cls=JSONEncoder)

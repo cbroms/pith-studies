@@ -229,6 +229,7 @@ export const studyStore = createDerivedSocketStore(
           console.log("readying...");
           // if they're in the waiting room, give them the ready step
           update((s) => {
+            console.log("pre-ready", s);
             const step = s.step;
             if (step === steps.WAITING_ROOM) {
               const json = JSON.parse(res);
