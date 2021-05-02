@@ -22,6 +22,8 @@
 
   {#if $studyStore.step === steps.WAITING_ROOM_READY_SUBMITTED}
     <h1>Waiting for others to continue...</h1>
+    <h2>If you do not see the Ready button once the timer ends and it has
+    been more than 15 seconds, try to reload the page.</h2>
   {/if}
 
   <h2>Keep in Mind...</h2>

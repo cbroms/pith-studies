@@ -68,7 +68,7 @@
   underneath the editor before sending your message.
 </p>
 <img src="tutorial/13.png" alt="Selecting a flair" />
-<p>The flair will be displayed alongside your message in the chat.</p>
+<p>The flair will be displayed alongside your message in the chat. In addition, flairing a post automatically pins it to the summary.</p>
 <img src="tutorial/14.png" alt="A flair on a message" />
 {#if $studyStore.testType === 2 || $studyStore.testType === 3}
   <h2>The Summary</h2>
